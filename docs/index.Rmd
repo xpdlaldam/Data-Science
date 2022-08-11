@@ -1,5 +1,5 @@
 ---
-title: "How to use tidyr::pivor_wider"
+title: "How to use tidyr::pivot_wider"
 ---
 
 ```{r}
