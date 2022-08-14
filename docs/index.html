@@ -241,7 +241,7 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">My Website</a>
+      <a class="navbar-brand" href="index.html">How To Use Tidyr The Smart Way</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -265,23 +265,119 @@ $(document).ready(function () {
 </div>
 
 
-<pre class="r"><code>library(tidyr)</code></pre>
-<pre><code>## Warning: package &#39;tidyr&#39; was built under R version 4.1.3</code></pre>
-<pre class="r"><code>metric1 &lt;- c(15.3, 14.7, 15.2, 13.8, 15.4, 14.8, 14.9, 15.1, 15.9)
+<p><br></p>
+<div id="goal-convert-data-format-from-long-to-wide"
+class="section level2">
+<h2>Goal: Convert data format from long to wide</h2>
+<div
+id="there-are-times-when-one-wants-to-widenspread-a-column-ie.-convert-a-column-to-have-its-unique-values-as-separate-columns-hence-making-the-data-format-long-to-wide.-one-can-easily-achieve-this-by-using-the-pivot_wider-function-from-the-tidyr-package.-let-me-walk-you-through-with-an-example"
+class="section level3">
+<h3>There are times when one wants to widen/spread a column i,e.,
+convert a column to have its unique values as separate columns, hence
+making the data format long to wide. One can easily achieve this by
+using the pivot_wider function from the tidyr package. Let me walk you
+through with an example:</h3>
+<pre class="r"><code>library(tidyr)
+
+metric1 &lt;- c(15.3, 14.7, 15.2, 13.8, 15.4, 14.8, 14.9, 15.1, 15.9)
 id &lt;- c(&quot;A01&quot;, &quot;A01&quot;, &quot;A01&quot;, &quot;B01&quot;, &quot;B01&quot;, &quot;B01&quot;, &quot;B02&quot;, &quot;B02&quot;, &quot;B02&quot;)
 date &lt;- as.Date(rep(c(&quot;2022-01-01&quot;, &quot;2022-01-02&quot;, &quot;2022-01-03&quot;), 3))
 
 df &lt;- data.frame(metric1, id, date)
 
-df_srpead &lt;- df %&gt;% tidyr::pivot_wider(names_from = date, values_from = metric1)
-
-df_srpead</code></pre>
-<pre><code>## # A tibble: 3 x 4
-##   id    `2022-01-01` `2022-01-02` `2022-01-03`
-##   &lt;chr&gt;        &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;
-## 1 A01           15.3         14.7         15.2
-## 2 B01           13.8         15.4         14.8
-## 3 B02           14.9         15.1         15.9</code></pre>
+df_spread &lt;- df %&gt;% tidyr::pivot_wider(names_from = date, values_from = metric1)</code></pre>
+<pre class="r"><code># Before piot_wider()
+knitr::kable(df)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">metric1</th>
+<th align="left">id</th>
+<th align="left">date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">15.3</td>
+<td align="left">A01</td>
+<td align="left">2022-01-01</td>
+</tr>
+<tr class="even">
+<td align="right">14.7</td>
+<td align="left">A01</td>
+<td align="left">2022-01-02</td>
+</tr>
+<tr class="odd">
+<td align="right">15.2</td>
+<td align="left">A01</td>
+<td align="left">2022-01-03</td>
+</tr>
+<tr class="even">
+<td align="right">13.8</td>
+<td align="left">B01</td>
+<td align="left">2022-01-01</td>
+</tr>
+<tr class="odd">
+<td align="right">15.4</td>
+<td align="left">B01</td>
+<td align="left">2022-01-02</td>
+</tr>
+<tr class="even">
+<td align="right">14.8</td>
+<td align="left">B01</td>
+<td align="left">2022-01-03</td>
+</tr>
+<tr class="odd">
+<td align="right">14.9</td>
+<td align="left">B02</td>
+<td align="left">2022-01-01</td>
+</tr>
+<tr class="even">
+<td align="right">15.1</td>
+<td align="left">B02</td>
+<td align="left">2022-01-02</td>
+</tr>
+<tr class="odd">
+<td align="right">15.9</td>
+<td align="left">B02</td>
+<td align="left">2022-01-03</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># After piot_wider()
+knitr::kable(df_spread)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">id</th>
+<th align="right">2022-01-01</th>
+<th align="right">2022-01-02</th>
+<th align="right">2022-01-03</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">A01</td>
+<td align="right">15.3</td>
+<td align="right">14.7</td>
+<td align="right">15.2</td>
+</tr>
+<tr class="even">
+<td align="left">B01</td>
+<td align="right">13.8</td>
+<td align="right">15.4</td>
+<td align="right">14.8</td>
+</tr>
+<tr class="odd">
+<td align="left">B02</td>
+<td align="right">14.9</td>
+<td align="right">15.1</td>
+<td align="right">15.9</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 
 
 
