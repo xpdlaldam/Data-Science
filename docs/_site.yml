@@ -1,10 +1,17 @@
 name: "mymy"
 output_dir: "docs"
 navbar:
-  title: "How To Use Tidyr The Smart Way"
+  title: "Home"
   left:
-    - text: "Home"
-      href: index.html
+    - text: "R"
+      menu:
+        - text: "tidyr"
+          href: index.html
+    
+    - text: "Machine Learning"
+      menu:
+        - text: "Ridge Regression"
+          href: ml.html
 output:
   html_document:
     theme: cosmo

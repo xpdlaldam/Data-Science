@@ -6,7 +6,7 @@ title: "How to use tidyr::pivot_wider"
  
 ## Goal: Convert data format from long to wide
 
-### There are times when one wants to widen/spread a column i,e., convert a column to have its unique values as separate columns, hence making the data format long to wide. One can easily achieve this by using the pivot_wider function from the tidyr package. Let me walk you through with an example:
+There are times when one wants to widen/spread a column i,e., convert a column to have its unique values as separate columns, hence making the data format long to wide. One can easily achieve this by using the pivot_wider function from the tidyr package. Let me walk you through with an example:
 
 ```{r message=FALSE, warning=FALSE, results='asis', tidy=F}
 library(tidyr)
