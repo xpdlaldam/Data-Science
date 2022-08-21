@@ -1,0 +1,24 @@
+name: "mymy"
+output_dir: "docs"
+navbar:
+  title: "Home"
+  href: index.html
+  
+  left:
+    - text: "R"
+      menu:
+        - text: "tidyr"
+          href: pivotwider.html
+    
+    
+    - text: "Machine Learning"
+      menu:
+        - text: "Regularized Linear Models"
+          href: regularized.html
+          
+        - text: "PCA"
+          href: pca.html
+output:
+  html_document:
+    theme: cosmo
+    highlight: textmate
