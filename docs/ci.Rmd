@@ -1,0 +1,18 @@
+---
+title: "Misconceptions about Confidence Intervals"
+output: html_document
+---
+
+A Confidence Interval (CI) is an estimate of the possible values of a population mean. This fairly simple definition is frequently misinterpreted such as the following statement:
+
+-   For a 95% CI, there is a 95% chance that the true population mean falls within the confidence interval
+
+Let's go over why this is wrong. Let's assume we have data from a given population. Because we can't use the entire population data due to limited resources, we normally draw certain samples hoping that our samples will give a good estimate that represents the population.
+
+A 95% CI from one random sample might be between 2 and 5, but for another random sample it might be between 1 and 4. So the 95% CI will vary from sample to sample. Some of the intervals calculated from these random samples will contain the true population mean, and some will not.
+
+A 95% confidence level means that 95% of the confidence intervals computed from these random samples will contain the true population mean. Thus, when we construct a 95% CI, this interval **only applies to a certain sample**.
+
+Once a 95% CI is constructed, the true population is either inside or outside of the interval, and no one can decide where exactly it falls. We can only say how often such intervals may include the true mean.
+
+To summarize, a CI can encompass the true mean with some chance. However that doesn't mean that for some specific interval, there's a x% chance of finding the true value within the interval.

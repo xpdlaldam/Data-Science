@@ -313,8 +313,7 @@ import pandas as pd
 from sklearn.datasets import make_regression
 from sklearn.datasets import make_regression
 from matplotlib import pyplot as plt
-from sklearn.linear_model import Ridge
-from sklearn.linear_model import Lasso</code></pre>
+from sklearn.linear_model import Ridge, Lasso, ElasticNet</code></pre>
 <pre class="python"><code>## Generate data with one coefficient fitted from a linear regression model
 X, y, coef = make_regression(
     n_samples=20,
@@ -385,7 +384,32 @@ w</code></pre>
 plt.scatter(X, y)
 plt.plot(X, w*X, c=&#39;red&#39;)</code></pre>
 <p><img src="regularized_files/figure-html/unnamed-chunk-6-5.png" width="672" /></p>
-<p>Lasso return a fairly close fit to Ridge Regression</p>
+<p>Lasso returns a fairly close fit to Ridge Regression</p>
+<p>Lastly, Elastic Net is a middle ground between Ridge Regression and
+Lasso Regression. The regularization term is a mix of both where <span
+class="math inline">\(r\)</span> controls the mix ratio.</p>
+<p><span class="math display">\[ min \sum_{i=1}^{n} (\hat{y} - y)^2 +
+r\lambda \sum_{i=1}^{m}|w_i| + \frac{(1-r)}2 \lambda \sum_{i=1}^{m}
+w_i^2 \]</span></p>
+<pre class="python"><code>## Elastic Net
+# Fit
+enet = ElasticNet(alpha=lambda_value, l1_ratio=.5)
+enet.fit(X, y)</code></pre>
+<pre><code>## ElasticNet(alpha=10)</code></pre>
+<pre class="python"><code>w = enet.coef_
+w</code></pre>
+<pre><code>## array([12.98074155])</code></pre>
+<pre class="python"><code># Plot
+plt.scatter(X, y)
+plt.plot(X, w*X, c=&#39;red&#39;)</code></pre>
+<p><img src="regularized_files/figure-html/unnamed-chunk-8-7.png" width="672" /></p>
+<p>So you might be wondering which one to use including Linear
+Regression without any regularization. Rule of thumb is to avoid using
+plain Linear Regression. One can start with Ridge but if you think there
+are features that are not important, you should use Lasso or Elastic
+Net. Normally, Elastic Net is preferred over Lasso since Lasso can
+behave weird when the number of features is greater than the number of
+instances or when some features have a strong correlation.</p>
 
 
 

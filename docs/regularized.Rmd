@@ -24,8 +24,7 @@ import pandas as pd
 from sklearn.datasets import make_regression
 from sklearn.datasets import make_regression
 from matplotlib import pyplot as plt
-from sklearn.linear_model import Ridge
-from sklearn.linear_model import Lasso
+from sklearn.linear_model import Ridge, Lasso, ElasticNet
 ```
 
 ```{python}
@@ -99,4 +98,26 @@ plt.scatter(X, y)
 plt.plot(X, w*X, c='red')
 ```
 
-Lasso return a fairly close fit to Ridge Regression 
+Lasso returns a fairly close fit to Ridge Regression 
+
+
+Lastly, Elastic Net is a middle ground between Ridge Regression and Lasso Regression. The regularization term is a mix of both where $r$ controls the mix ratio.
+
+$$ min \sum_{i=1}^{n} (\hat{y} - y)^2 + r\lambda \sum_{i=1}^{m}|w_i| + \frac{(1-r)}2 \lambda \sum_{i=1}^{m} w_i^2 $$
+
+```{python}
+## Elastic Net
+# Fit
+enet = ElasticNet(alpha=lambda_value, l1_ratio=.5)
+enet.fit(X, y)
+w = enet.coef_
+w
+```
+
+```{python}
+# Plot
+plt.scatter(X, y)
+plt.plot(X, w*X, c='red')
+```
+
+So you might be wondering which one to use including Linear Regression without any regularization. Rule of thumb is to avoid using plain Linear Regression. One can start with Ridge but if you think there are features that are not important, you should use Lasso or Elastic Net. Normally, Elastic Net is preferred over Lasso since Lasso can behave weird when the number of features is greater than the number of instances or when some features have a strong correlation.

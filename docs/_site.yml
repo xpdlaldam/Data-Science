@@ -10,7 +10,6 @@ navbar:
         - text: "tidyr"
           href: pivotwider.html
     
-    
     - text: "Machine Learning"
       menu:
         - text: "Regularized Linear Models"
@@ -18,6 +17,12 @@ navbar:
           
         - text: "PCA"
           href: pca.html
+    
+    - text: "Statistics"
+      menu:
+        - text: "Misconceptions About CIs"
+          href: ci.html
+          
 output:
   html_document:
     theme: cosmo
