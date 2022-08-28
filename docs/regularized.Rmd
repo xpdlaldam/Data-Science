@@ -7,13 +7,11 @@ output: html_document
 
 First, we will discuss Ridge Regression. But beofre that let's first go through Linear Regression. Recall that the cost function for Linear Regression is:
 
-$$min\sum_{i=1}^{n} (\hat y - y)^2$$ 
+$$min\sum_{i=1}^{n} (\hat y - y)^2$$
 
-The loss function for Ridge Regression is: 
-$$ min \sum_{i=1}^{n} (\hat{y} - y)^2 + \lambda \sum_{i=1}^{m} w_i $$ 
-The added regularization term in Ridge Regression is called the $l2$-norm which acts as a penalty to Linear Regression. In other words, Ridge Regression introduces a small bias. Why? In return for the bias, we can achieve reduced variance. If the model has a high variance, it'll probably not generalize well for unseen future data points.
+The loss function for Ridge Regression is: $$ min \sum_{i=1}^{n} (\hat{y} - y)^2 + \lambda \sum_{i=1}^{m} w_i $$ The added regularization term in Ridge Regression is called the $l2$-norm which acts as a penalty to Linear Regression. In other words, Ridge Regression introduces a small bias. Why? In return for the bias, we can achieve reduced variance. We call this the bias-variance tradeoff. If the model has a high variance, it'll probably not generalize well for unseen future data points.
 
-This is why Ridge Regression is a **regularized** linear model. 
+This is why Ridge Regression is a **regularized** linear model.
 
 Let's see what this all means in action:
 
@@ -59,6 +57,7 @@ As you can see, Ridge Regression (red line) is very close to Linear Regression w
 <br>
 
 If we increase `lambda_value` to 10:
+
 ```{python}
 lambda_value = 10 
 rr = Ridge(lambda_value) 
@@ -98,8 +97,7 @@ plt.scatter(X, y)
 plt.plot(X, w*X, c='red')
 ```
 
-Lasso returns a fairly close fit to Ridge Regression 
-
+Lasso returns a fairly close fit to Ridge Regression
 
 Lastly, Elastic Net is a middle ground between Ridge Regression and Lasso Regression. The regularization term is a mix of both where $r$ controls the mix ratio.
 
@@ -121,3 +119,17 @@ plt.plot(X, w*X, c='red')
 ```
 
 So you might be wondering which one to use including Linear Regression without any regularization. Rule of thumb is to avoid using plain Linear Regression. One can start with Ridge but if you think there are features that are not important, you should use Lasso or Elastic Net. Normally, Elastic Net is preferred over Lasso since Lasso can behave weird when the number of features is greater than the number of instances or when some features have a strong correlation.
+
+Before we end this chapter, I'll talk a little more on how to deal with overfitting and underfitting. Overfitting happens when the model is too complex relative to the amount and noisiness of the training data. The solutions are:
+
+-   Simplifying your model by choosing one with fewer paramaters like a linear model over a high-degree polynomial model or regularizing the model as we learned from this chapter
+-   Obtain more data
+-   Remove noise such as fixing simple data entry errors or/and removing outliers
+
+For underfitting models we could:
+
+-   Select a more complex model with more parameters
+-   Feed better features
+-   Loosen up the model constrains
+
+From *Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow*

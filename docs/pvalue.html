@@ -11,7 +11,7 @@
 
 
 
-<title>How and when to use Regularized Linear Models</title>
+<title>P-value</title>
 
 <script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -268,6 +268,9 @@ $(document).ready(function () {
       <a href="regularized.html">Regularized Linear Models</a>
     </li>
     <li>
+      <a href="confusion.html">Confusion Matrix</a>
+    </li>
+    <li>
       <a href="pca.html">PCA</a>
     </li>
   </ul>
@@ -281,6 +284,9 @@ $(document).ready(function () {
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="ci.html">Misconceptions About CIs</a>
+    </li>
+    <li>
+      <a href="pvalue.html">P-value</a>
     </li>
   </ul>
 </li>
@@ -296,153 +302,69 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">How and when to use Regularized Linear
-Models</h1>
+<h1 class="title toc-ignore">P-value</h1>
 
 </div>
 
 
-<p><br></p>
-<p>First, we will discuss Ridge Regression. But beofre that let’s first
-go through Linear Regression. Recall that the cost function for Linear
-Regression is:</p>
-<p><span class="math display">\[min\sum_{i=1}^{n} (\hat y -
-y)^2\]</span></p>
-<p>The loss function for Ridge Regression is: <span
-class="math display">\[ min \sum_{i=1}^{n} (\hat{y} - y)^2 + \lambda
-\sum_{i=1}^{m} w_i \]</span> The added regularization term in Ridge
-Regression is called the <span class="math inline">\(l2\)</span>-norm
-which acts as a penalty to Linear Regression. In other words, Ridge
-Regression introduces a small bias. Why? In return for the bias, we can
-achieve reduced variance. We call this the bias-variance tradeoff. If
-the model has a high variance, it’ll probably not generalize well for
-unseen future data points.</p>
-<p>This is why Ridge Regression is a <strong>regularized</strong> linear
-model.</p>
-<p>Let’s see what this all means in action:</p>
-<pre class="python"><code>## Python 3.9.6
-## Import packages
-import pandas as pd
-from sklearn.datasets import make_regression
-from sklearn.datasets import make_regression
-from matplotlib import pyplot as plt
-from sklearn.linear_model import Ridge, Lasso, ElasticNet</code></pre>
-<pre class="python"><code>## Generate data with one coefficient fitted from a linear regression model
-X, y, coef = make_regression(
-    n_samples=20,
-    n_features=1,
-    n_informative=1, # number of useful features
-    n_targets=1,
-    noise=20,
-    coef=True,
-    random_state=1
-)
+<p>We use p-values a lot in our daily lives. However, if someone asks
+you what it really means you will probably have a hard time explaining.
+We will go through what exactly a p-value is with a concrete example one
+by one.</p>
+<p>The definition of a p-value can be divided into three parts assuming
+the null hypothesis is true:</p>
+<ol style="list-style-type: decimal">
+<li>The probability that random chance generated the data</li>
+<li><strong>OR</strong> something else that is equal</li>
+<li><strong>OR</strong> rarer</li>
+</ol>
+<p>Let’s go through an example. We will use a randomly generated data
+from a normal distribution with mean = 180 and standard deviation = 10.
+Assume that the data is the weights of 1 million subjects of an
+experiment in pounds. What is the p-value for a subject who is 142
+lbs</p>
+<pre class="r"><code>library(dplyr)
+library(ggplot2)
 
-coef</code></pre>
-<pre><code>## array(69.1877114)</code></pre>
-<pre class="python"><code>lambda_value = 1 
-rr = Ridge(lambda_value) 
-rr.fit(X, y)</code></pre>
-<pre><code>## Ridge(alpha=1)</code></pre>
-<pre class="python"><code>w = rr.coef_
-w</code></pre>
-<pre><code>## array([67.96344041])</code></pre>
-<pre class="python"><code>plt.scatter(X, y)
-plt.plot(X, w*X, c=&#39;red&#39;)</code></pre>
-<p><img src="regularized_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
-<p>As you can see, Ridge Regression (red line) is very close to Linear
-Regression when lambda_value = 1</p>
-<p><br></p>
-<p>If we increase <code>lambda_value</code> to 10:</p>
-<pre class="python"><code>lambda_value = 10 
-rr = Ridge(lambda_value) 
-rr.fit(X, y)</code></pre>
-<pre><code>## Ridge(alpha=10)</code></pre>
-<pre class="python"><code>w = rr.coef_
-w</code></pre>
-<pre><code>## array([50.0738474])</code></pre>
-<pre class="python"><code>plt.scatter(X, y)
-plt.plot(X, w*X, c=&#39;red&#39;)</code></pre>
-<p><img src="regularized_files/figure-html/unnamed-chunk-4-3.png" width="672" /></p>
-<p>Now, we see a slightly worse fit (higher bias) but we expect to have
-a lower variance for new data points.</p>
-<p><br></p>
-<p>Next, we have Lasso Regression. Like Ridge Regression, it is another
-regularized linear model to prevent the model from overfitting. The only
-difference is in the cost function:</p>
-<p><span class="math display">\[ min \sum_{i=1}^{n} (\hat{y} - y)^2 +
-\lambda \sum_{i=1}^{m} |w_i| \]</span> The new regularization term is
-called the <span class="math inline">\(l1\)</span>-norm. The difference
-becomes clear by checking visually:</p>
-<div class="figure">
-<img src="imgs/lasso_img.png" alt="" />
-<p class="caption">Plot from <a
-href="https://towardsdatascience.com/ridge-and-lasso-regression-a-complete-guide-with-python-scikit-learn-e20e34bcbf0b"
-class="uri">https://towardsdatascience.com/ridge-and-lasso-regression-a-complete-guide-with-python-scikit-learn-e20e34bcbf0b</a></p>
-</div>
-<p>The first point where the elliptical contours touch the region of
-constraints is how the coefficients from both Ridge and Lasso Regression
-are determined. Unlike the circular shape of Ridge, Lasso has corners.
-Hence, if the contour hits the corners, the feature(s) will disappear.
-Thus, Lasso can perform variable selection, hence the name <strong>Least
-Absolute Shrinkage and Selection Operator</strong>.</p>
-<p>If we fit using the same <code>X</code> and <code>y</code> data:</p>
-<pre class="python"><code>las = Lasso(lambda_value)
-las.fit(X, y)</code></pre>
-<pre><code>## Lasso(alpha=10)</code></pre>
-<pre class="python"><code>w = las.coef_
-w</code></pre>
-<pre><code>## array([62.50545386])</code></pre>
-<pre class="python"><code># Plot
-plt.scatter(X, y)
-plt.plot(X, w*X, c=&#39;red&#39;)</code></pre>
-<p><img src="regularized_files/figure-html/unnamed-chunk-6-5.png" width="672" /></p>
-<p>Lasso returns a fairly close fit to Ridge Regression</p>
-<p>Lastly, Elastic Net is a middle ground between Ridge Regression and
-Lasso Regression. The regularization term is a mix of both where <span
-class="math inline">\(r\)</span> controls the mix ratio.</p>
-<p><span class="math display">\[ min \sum_{i=1}^{n} (\hat{y} - y)^2 +
-r\lambda \sum_{i=1}^{m}|w_i| + \frac{(1-r)}2 \lambda \sum_{i=1}^{m}
-w_i^2 \]</span></p>
-<pre class="python"><code>## Elastic Net
-# Fit
-enet = ElasticNet(alpha=lambda_value, l1_ratio=.5)
-enet.fit(X, y)</code></pre>
-<pre><code>## ElasticNet(alpha=10)</code></pre>
-<pre class="python"><code>w = enet.coef_
-w</code></pre>
-<pre><code>## array([12.98074155])</code></pre>
-<pre class="python"><code># Plot
-plt.scatter(X, y)
-plt.plot(X, w*X, c=&#39;red&#39;)</code></pre>
-<p><img src="regularized_files/figure-html/unnamed-chunk-8-7.png" width="672" /></p>
-<p>So you might be wondering which one to use including Linear
-Regression without any regularization. Rule of thumb is to avoid using
-plain Linear Regression. One can start with Ridge but if you think there
-are features that are not important, you should use Lasso or Elastic
-Net. Normally, Elastic Net is preferred over Lasso since Lasso can
-behave weird when the number of features is greater than the number of
-instances or when some features have a strong correlation.</p>
-<p>Before we end this chapter, I’ll talk a little more on how to deal
-with overfitting and underfitting. Overfitting happens when the model is
-too complex relative to the amount and noisiness of the training data.
-The solutions are:</p>
-<ul>
-<li>Simplifying your model by choosing one with fewer paramaters like a
-linear model over a high-degree polynomial model or regularizing the
-model as we learned from this chapter</li>
-<li>Obtain more data</li>
-<li>Remove noise such as fixing simple data entry errors or/and removing
-outliers</li>
-</ul>
-<p>For underfitting models we could:</p>
-<ul>
-<li>Select a more complex model with more parameters</li>
-<li>Feed better features</li>
-<li>Loosen up the model constrains</li>
-</ul>
-<p>From <em>Hands-On Machine Learning with Scikit-Learn, Keras, and
-TensorFlow</em></p>
+m &lt;- 150
+std &lt;- 5 
+
+df &lt;- data.frame(weight = rnorm(n = 1000000, mean = m, sd = std))
+
+cutoff1  &lt;- quantile(df$weight, .05)
+cutoff2  &lt;- quantile(df$weight, .95)
+
+ggplot(df, aes(x = weight)) +
+  geom_density() +
+  stat_function(fun = dnorm, args = list(mean = m, sd = std), xlim = c(min(df$weight), cutoff1), geom = &quot;area&quot;) +
+  stat_function(fun = dnorm, args = list(mean = m, sd = std), xlim = c(cutoff2, max(df$weight)), geom = &quot;area&quot;) +
+  theme_classic() +
+  geom_vline(xintercept = cutoff1, linetype= &quot;dashed&quot;) + 
+  geom_vline(xintercept = cutoff2, linetype= &quot;dashed&quot;) +
+  annotate(&quot;text&quot;, x = cutoff1, y = -.01, label = as.character(round(cutoff1)), size = 3.5, fontface = &quot;bold&quot;) +
+  annotate(&quot;text&quot;, x = cutoff2, y = -.01, label = as.character(round(cutoff2)), size = 3.5, fontface = &quot;bold&quot;) +
+  coord_cartesian(ylim = c(0, .08), clip = &quot;off&quot;) </code></pre>
+<p><img src="pvalue_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p>To compute p-values for a continuous outcome, you need to sum the
+percentages of area under the curve. Since 142 lbs is 0.05 quantile, the
+left shaded region’s area under the curve accounts for 5%. We add this
+area that is smaller or less than 142 which is the first half of the
+“equal or rarer” part. Now we look at the other “equal or rarer”. Since
+.95 quantile of our weight distribution is at 158 lbs, we add the right
+shaded area that is greater or equal than 158. Thus, the p-value for
+someone weighing 142 lbs is .05 + .05 = 0.1.</p>
+<p>As you can see, the closer the p-value is to zero, the area under the
+curve gets smaller which means under the null hypothesis, the desired
+outcome will become rarer to observe. In terms of hypothesis testing
+comparing two treatments A and B, the smaller the p-value, the more
+confident that A and B are different. But how small should the p-value
+be? Rule of thumb is 5% which means if there was no difference detected
+between A and B, and if we did the same experiment multiple times, then
+only 5% of the experiments will result in the wrong direction due to
+random causes. Equivalently, we are willing to get a 5% false
+positive.</p>
+<p>Lastly, p-values do not tell the effect size or <strong>how</strong>
+different the groups are.</p>
 
 
 

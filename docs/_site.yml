@@ -15,6 +15,9 @@ navbar:
         - text: "Regularized Linear Models"
           href: regularized.html
           
+        - text: "Confusion Matrix"
+          href: confusion.html
+          
         - text: "PCA"
           href: pca.html
     
@@ -22,6 +25,9 @@ navbar:
       menu:
         - text: "Misconceptions About CIs"
           href: ci.html
+        
+        - text: "P-value"
+          href: pvalue.html
           
 output:
   html_document:
