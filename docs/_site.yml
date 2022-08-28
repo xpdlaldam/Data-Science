@@ -9,20 +9,15 @@ navbar:
       menu:
         - text: "tidyr"
           href: pivotwider.html
-    
+          
     - text: "Machine Learning"
       menu:
         - text: "Regularized Linear Models"
           href: regularized.html
-          
-        - text: "Confusion Matrix"
-          href: confusion.html
-          
-        - text: "PCA"
-          href: pca.html
-    
+        
     - text: "Statistics"
       menu:
+        
         - text: "Misconceptions About CIs"
           href: ci.html
         
