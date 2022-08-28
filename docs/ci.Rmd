@@ -3,6 +3,8 @@ title: "Misconceptions about Confidence Intervals"
 output: html_document
 ---
 
+<style> body {text-align: justify} </style>
+
 A Confidence Interval (CI) is an estimate of the possible values of a population mean. This fairly simple definition is frequently misinterpreted such as the following statement:
 
 -   For a 95% CI, there is a 95% chance that the true population mean falls within the confidence interval

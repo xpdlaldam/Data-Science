@@ -3,6 +3,8 @@ title: "P-value"
 output: html_document
 ---
 
+<style> body {text-align: justify} </style>
+
 We use p-values a lot in our daily lives. However, if someone asks you what it really means you will probably have a hard time explaining. We will go through what exactly a p-value is with a concrete example one by one.
 
 The definition of a p-value can be divided into three parts assuming the null hypothesis is true:

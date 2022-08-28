@@ -3,5 +3,7 @@ title: "All modesl are wrong, but some are useful - George Box"
 output: html_document
 ---
 
+<style> body {text-align: justify} </style>
+
 Hi, I am Seunghoon a full time Data Analyst at a biochemical company based in Wisconsin with three years of professional experience.
 

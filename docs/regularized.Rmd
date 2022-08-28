@@ -3,6 +3,8 @@ title: "How and when to use Regularized Linear Models"
 output: html_document
 ---
 
+<style> body {text-align: justify} </style>
+
 <br>
 
 First, we will discuss Ridge Regression. But beofre that let's first go through Linear Regression. Recall that the cost function for Linear Regression is:

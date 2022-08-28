@@ -2,6 +2,8 @@
 title: "How to use tidyr::pivot_wider"
 ---
 
+<style> body {text-align: justify} </style>
+
 <br>
  
 ## Goal: Convert data format from long to wide
