@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>How to Find Maximum Likelihood Estimators for Mean &amp; Standard Deviation</title>
+
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    R
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="pivotwider.html">tidyr</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Machine Learning
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="regularized.html">Regularized Linear Models</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Statistics
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="ci.html">Misconceptions About CIs</a>
+    </li>
+    <li>
+      <a href="pvalue.html">P-value</a>
+    </li>
+    <li>
+      <a href="probvslike.html">Probability vs Likelihood</a>
+    </li>
+    <li>
+      <a href="mle.html">MLE</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">How to Find Maximum Likelihood Estimators
+for Mean &amp; Standard Deviation</h1>
+
+</div>
+
+
+<style> body {text-align: justify} </style>
+<p>Now that we know what a <strong>likelihood</strong> is we turn our
+focus to Maximum Likelihood Estimator (MLE) which simply maximizes the
+likelihood function.</p>
+<p>We will use the likelihood of a normal distribution to find the
+optimal values for mean <span class="math inline">\(\mu\)</span> and
+standard deviation <span class="math inline">\(\sigma\)</span> given an
+observation <code>x</code>, i.e.,</p>
+<p><span class="math display">\[L(\mu, \sigma~|~x)\]</span>.</p>
+<p>Let’s start with MLE for <span class="math inline">\(\mu\)</span>. If
+we fix <span class="math inline">\(\sigma\)</span> as given and plug in
+many <span class="math inline">\(\mu\)</span> to our normal likelihood
+function, we get multiple <span class="math inline">\(\mu\)</span>
+values i.e., <span class="math display">\[L(\mu&#39;s~|~\sigma,
+x)\]</span> Then we check which <span class="math inline">\(\mu\)</span>
+gives the maximum likelihood. Note that <strong>the peak is when the
+slope of the curve is 0</strong>.</p>
+<p>We do the same for <span class="math inline">\(\sigma\)</span> this
+time by fixing <span class="math inline">\(\mu\)</span>: <span
+class="math display">\[L(\sigma&#39;s~|~\mu, x)\]</span></p>
+<p>Now that we know the likelihood functions for both of the normal
+parameters <span class="math inline">\(\mu\)</span> and <span
+class="math inline">\(\sigma\)</span> for a single observation, we
+expand this logic to <code>n</code> observations. Because each sample is
+independent, the likelihood function for n samples is:</p>
+<span class="math display">\[\begin{aligned}
+
+L(\mu, \sigma~|~x_1, x_2, ..., x_n) &amp;=L(\mu, \sigma~|~x_1)...L(\mu,
+\sigma~|~x_n) \\
+&amp;=\frac{1}{\sqrt{2\pi\sigma^2}}e^{\frac{(x_1-\mu)^2}{2\sigma^2}}
+...\frac{1}{\sqrt{2\pi\sigma^2}}e^{\frac{(x_n-\mu)^2}{2\sigma^2}}
+
+\end{aligned}\]</span>
+<p>MLE for <span class="math inline">\(\mu\)</span> is finding the
+derivative of L with respect to <span class="math inline">\(\mu\)</span>
+and solving it for <span class="math inline">\(\mu\)</span>. One trick
+we can use is to take the derivative of log L instead of L as it makes
+the calculation much easier. Note that the peaks for <span
+class="math inline">\(\mu\)</span> and <span
+class="math inline">\(\sigma\)</span> of both functions are
+identical.</p>
+<span class="math display">\[\begin{aligned}
+
+ln[L(\mu, \sigma~|~x_1, x_2, \dots, x_n)] &amp;= ln[L(\mu,
+\sigma~|~x_1)]+ \dots +ln[L(\mu, \sigma~|~x_n)] \\
+
+&amp;=
+ln(\frac{1}{\sqrt{2\pi\sigma^2}}e^{\frac{(x_1-\mu)^2}{2\sigma^2}})
++ \dots +
+ln(\frac{1}{\sqrt{2\pi\sigma^2}}e^{\frac{(x_n-\mu)^2}{2\sigma^2}})\\
+
+&amp;= (-\frac{1}{2}ln(2\pi\sigma^2)-\frac{(x_1-\mu)^2}{2\sigma^2}) +
+\dots +
+(-\frac{1}{2}ln(2\pi\sigma^2)-\frac{(x_n-\mu)^2}{2\sigma^2})\\
+
+&amp;=
+-\frac{1}{2}ln(2\pi)-\frac{1}{2}ln\sigma^2-\frac{(x_1-\mu)^2}{2\sigma^2}
+- \dots-
+\frac{1}{2}ln(2\pi)-\frac{1}{2}ln\sigma^2-\frac{(x_n-\mu)^2}{2\sigma^2}\\
+
+&amp;=
+-\frac{n}{2}ln(2\pi)-nln\sigma-\frac{1}{2\sigma^2}\sum_{i=1}^{n}(x_i-\mu)^2
+
+\end{aligned}\]</span>
+<p>Hence, the derivative we will take with respect to <span
+class="math inline">\(\mu\)</span> is:</p>
+<p><span
+class="math display">\[-\frac{n}{2}ln(2\pi)-nln\sigma-\frac{1}{2\sigma^2}\sum_{i=1}^{1}(x_i-\mu)^2~i.e.,
+\]</span></p>
+<span class="math display">\[\begin{aligned}
+
+&amp;\frac{\partial}{\partial \mu} ln[L(\mu, \sigma~|~x_1, x_2, \dots ,
+x_n)] \\
+
+=&amp; \frac{1}{\sigma^2}(\sum_{i=1}^{n}x_i-n\mu) = 0 \\
+
+&amp;=&gt;~ \mu=\frac{1}{n}\sum_{i=1}^{n}x_i
+
+\end{aligned}\]</span>
+<p>Thus, MLE for <span class="math inline">\(\mu\)</span> = mean of the
+data which is the center of normal distribution.</p>
+<p>Next, we take the derivative with respect to <span
+class="math inline">\(\sigma\)</span>~:</p>
+<span class="math display">\[\begin{aligned}
+
+&amp;\frac{\partial}{\partial \sigma} ln[L(\mu, \sigma~|~x_1, x_2, \dots
+, x_n)] \\
+
+&amp;= -\frac{n}{\sigma}+\frac{1}{\sigma^3}\sum_{i=1}^{n}(x_i-\mu)^2 = 0
+\\
+
+&amp;=&gt;~ \sigma = \sqrt{\frac{1}{n}\sum_{i=1}^{n}(x_i-\mu)^2}
+
+\end{aligned}\]</span>
+<p>Thus, MLE for <span class="math inline">\(\sigma\)</span> = standard
+deviation of the data which is the widness of normal distribution.</p>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

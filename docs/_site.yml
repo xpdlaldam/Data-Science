@@ -23,6 +23,12 @@ navbar:
         
         - text: "P-value"
           href: pvalue.html
+        
+        - text: "Probability vs Likelihood"
+          href: probvslike.html
+        
+        - text: "MLE"
+          href: mle.html
           
 output:
   html_document:
