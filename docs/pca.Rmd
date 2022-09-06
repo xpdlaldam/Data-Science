@@ -1,7 +1,0 @@
----
-title: "Principal Component Analysis"
-output: html_document
----
-
-<br>
-
