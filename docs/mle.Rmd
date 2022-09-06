@@ -8,9 +8,7 @@ output: html_document
 ```
 Now that we know what a **likelihood** is we turn our focus to Maximum Likelihood Estimator (MLE) which simply maximizes the likelihood function.
 
-We will use the likelihood of a normal distribution to find the optimal values for mean $\mu$ and standard deviation $\sigma$ given an observation `x`, i.e.,
-
-$$L(\mu, \sigma~|~x)$$.
+We will use the likelihood of a normal distribution to find the optimal values for mean $\mu$ and standard deviation $\sigma$ given an observation `x`, i.e., $L(\mu, \sigma~|~x)$.
 
 Let's start with MLE for $\mu$. If we fix $\sigma$ as given and plug in many $\mu$ to our normal likelihood function, we get multiple $\mu$ values i.e., $$L(\mu's~|~\sigma, x)$$ Then we check which $\mu$ gives the maximum likelihood. Note that **the peak is when the slope of the curve is 0**.
 

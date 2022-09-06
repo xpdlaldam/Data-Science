@@ -1,5 +1,0 @@
----
-title: "How to Evaluate a Classifier"
-output: html_document
----
-

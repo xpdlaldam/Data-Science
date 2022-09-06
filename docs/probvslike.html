@@ -11,7 +11,7 @@
 
 
 
-<title>Principal Component Analysis</title>
+<title>Probability vs Likelihood</title>
 
 <script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -265,10 +265,28 @@ $(document).ready(function () {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="ridge.html">Regularized Linear Models</a>
+      <a href="regularized.html">Regularized Linear Models</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Statistics
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="ci.html">Misconceptions About CIs</a>
     </li>
     <li>
-      <a href="pca.html">PCA</a>
+      <a href="pvalue.html">P-value</a>
+    </li>
+    <li>
+      <a href="probvslike.html">Probability vs Likelihood</a>
+    </li>
+    <li>
+      <a href="mle.html">MLE</a>
     </li>
   </ul>
 </li>
@@ -284,12 +302,61 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Principal Component Analysis</h1>
+<h1 class="title toc-ignore">Probability vs Likelihood</h1>
 
 </div>
 
 
+<style> body {text-align: justify} </style>
+<p>Before explaining the difference between a probability and a
+likelihood, let’s first check visually.</p>
+<p>Let’s say we have data from a normal distribution with mean = 30 and
+standard deviation = 1.</p>
+<p>The <strong>probability</strong> of getting less than the observed
+value 28 given the distribution is:</p>
+<p><span class="math inline">\(P(X&lt;=28~|~N(30, 1))\)</span> which is
+the area under the curve below 28 as shown in the graph.</p>
+<pre class="r"><code>library(ggplot2)
+
+m &lt;- 30
+std &lt;- 1
+
+df &lt;- data.frame(weight = rnorm(n = 1000000, mean = m, sd = std))
+
+cutoff  &lt;- quantile(df$weight, .05)
+
+pnorm(cutoff, mean = m , sd = std) # Check area under the curve that&#39;s below the cutoff (pnorm() returns area under the curve)</code></pre>
+<pre><code>##         5% 
+## 0.04974474</code></pre>
+<pre class="r"><code>g1 &lt;- ggplot(df, aes(x = weight)) +
+  geom_density() +
+  stat_function(fun = dnorm, args = list(mean = m, sd = std), xlim = c(min(df$weight), cutoff), geom = &quot;area&quot;) +
+  theme_classic() +
+  annotate(&quot;text&quot;, x = cutoff, y = -.01, label = as.character(round(cutoff)), size = 3.5, fontface = &quot;bold&quot;) </code></pre>
 <p><br></p>
+<p>The <strong>likelihood</strong> of a distribution with mean = 30 and
+standard deviation = 1 given an observation = 28 is the y-axis value of
+our normal probability density function from the observed data point.
+Mathematically:</p>
+<p><span class="math inline">\(L(N(30, 1)~|~X=28)\)</span> We can get
+the y-axis value using <code>dnorm</code></p>
+<pre class="r"><code>density_value &lt;- dnorm(x = cutoff, mean = 30, sd = 1)</code></pre>
+<pre class="r"><code>library(grid)
+
+ggplot(df, aes(x = weight)) +
+  geom_density() +
+  theme_classic() +
+  annotate(&quot;text&quot;, x = cutoff, y = -.01, label = as.character(round(cutoff)), size = 3.5, fontface = &quot;bold&quot;) +
+  geom_segment(aes(x = 24.5, xend = cutoff, y = .1, yend = .1), color = &quot;black&quot;, size = 2) +
+  geom_segment(aes(x = cutoff, xend = cutoff, y = 0, yend = .1), color = &quot;black&quot;, size = 2) +
+  annotation_custom(textGrob(&quot;X&quot;, gp = gpar(col = &quot;red&quot;, fontsize = 25)), xmin = cutoff, xmax = cutoff, ymin = density_value, ymax = density_value) </code></pre>
+<p><img src="probvslike_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>Simply put, a probability is area under the curve in a fixed
+distribution and mathematically we say:</p>
+<p><span class="math inline">\(P(Data|Distribution)\)</span></p>
+<p>A likelihood is is a y-axis value for a fixed data point with
+distributions that can be moved and mathematically we say:</p>
+<p><span class="math inline">\(P(Distribution|Data)\)</span></p>
 
 
 

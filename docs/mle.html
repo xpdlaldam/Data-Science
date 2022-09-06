@@ -315,8 +315,8 @@ likelihood function.</p>
 <p>We will use the likelihood of a normal distribution to find the
 optimal values for mean <span class="math inline">\(\mu\)</span> and
 standard deviation <span class="math inline">\(\sigma\)</span> given an
-observation <code>x</code>, i.e.,</p>
-<p><span class="math display">\[L(\mu, \sigma~|~x)\]</span>.</p>
+observation <code>x</code>, i.e., <span class="math inline">\(L(\mu,
+\sigma~|~x)\)</span>.</p>
 <p>Let’s start with MLE for <span class="math inline">\(\mu\)</span>. If
 we fix <span class="math inline">\(\sigma\)</span> as given and plug in
 many <span class="math inline">\(\mu\)</span> to our normal likelihood
@@ -387,8 +387,8 @@ x_n)] \\
 &amp;=&gt;~ \mu=\frac{1}{n}\sum_{i=1}^{n}x_i
 
 \end{aligned}\]</span>
-<p>Thus, MLE for <span class="math inline">\(\mu\)</span> = mean of the
-data which is the center of normal distribution.</p>
+<p>Thus, MLE for <span class="math inline">\(\mu\)</span> equals the
+mean of the data which is the center of normal distribution.</p>
 <p>Next, we take the derivative with respect to <span
 class="math inline">\(\sigma\)</span>~:</p>
 <span class="math display">\[\begin{aligned}
@@ -402,8 +402,9 @@ class="math inline">\(\sigma\)</span>~:</p>
 &amp;=&gt;~ \sigma = \sqrt{\frac{1}{n}\sum_{i=1}^{n}(x_i-\mu)^2}
 
 \end{aligned}\]</span>
-<p>Thus, MLE for <span class="math inline">\(\sigma\)</span> = standard
-deviation of the data which is the widness of normal distribution.</p>
+<p>Thus, MLE for <span class="math inline">\(\sigma\)</span> equals the
+standard deviation of the data which is the widness of normal
+distribution.</p>
 
 
 
