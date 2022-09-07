@@ -25,7 +25,7 @@ pf)& ~E(Y)=E(\frac{1}{n}\sum_{i=1}^{n}X_i)=\frac{1}{n}\sum_{i=1}^{n}E(X_i)=\frac
 
 &~~~~~~~~~~~~~= \frac{1}{n^2}Var(\sum_{i=1}^{n}X_i)=\frac{1}{n^2}\sum_{i=1}^{n}Var(X_i)~~(\because all~X_i's~are~independent)\\
 
-&~~~~~~~~~~~~~= \frac{1}{n^2}n\sigma^2=\frac{\sigma^2}{n}~\square.
+&~~~~~~~~~~~~~= \frac{1}{n^2}n\sigma^2=\frac{\sigma^2}{n}~\square
 
 \end{aligned}
 ```
