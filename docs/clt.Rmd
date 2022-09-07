@@ -1,0 +1,33 @@
+---
+title: "Central Limit Theorem"
+output: html_document
+---
+
+Central Limit Theorem (CLT) is one of the most powerful yet simple concept in statistics. Let's state it formally: 
+
+```{=tex}
+\begin{aligned} 
+
+& Let~n~independent~and~identically~distributted(iid)~random~variables~X_1, \dots, X_n~with~E(X_i)=\mu~and~Var(X_i)=\sigma^2~<\infty.\\
+
+& Let~Y=\frac{1}{n}\sum_{i=1}^{n}X_i~i.e.,~the~mean.\\
+
+& Then,~Y\sim~N(\mu,\frac{\sigma^2}{n})
+
+\end{aligned}
+```
+```{=tex}
+\begin{aligned} 
+
+pf)& ~E(Y)=E(\frac{1}{n}\sum_{i=1}^{n}X_i)=\frac{1}{n}\sum_{i=1}^{n}E(X_i)=\frac{1}{n}n\mu=\mu~.\\
+
+& Var(Y)=Var(\frac{1}{n}\sum_{i=1}^{n}X_i)\\
+
+&~~~~~~~~~~~~~= \frac{1}{n^2}Var(\sum_{i=1}^{n}X_i)=\frac{1}{n^2}\sum_{i=1}^{n}Var(X_i)~~(\because all~X_i's~are~independent)\\
+
+&~~~~~~~~~~~~~= \frac{1}{n^2}n\sigma^2=\frac{\sigma^2}{n}~\square.
+
+\end{aligned}
+```
+
+Hence, the beauty of of the CLT theorem is that even though our original data does not follow a normal distribution the mean will be assuming $n>30$.

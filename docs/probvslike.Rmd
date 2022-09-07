@@ -6,13 +6,7 @@ output: html_document
 ```{=html}
 <style> body {text-align: justify} </style>
 ```
-Before explaining the difference between a probability and a likelihood, let's first check visually.
-
-Let's say we have data from a normal distribution with mean = 30 and standard deviation = 1.
-
-The **probability** of getting less than the observed value 28 given the distribution is:
-
-$P(X<=28~|~N(30, 1))$ which is the area under the curve below 28 as shown in the graph.
+Before explaining the difference between a probability and a likelihood, let's first check visually. Let's say we have data from a normal distribution with mean = 30 and standard deviation = 1. The **probability** of getting less than the observed value 28 given the distribution is $P(X<=28~|~N(30, 1))$ which is the area under the curve below 28 as shown in the graph.
 
 ```{r, warning=FALSE, message=FALSE}
 library(ggplot2)
@@ -35,9 +29,7 @@ g1 <- ggplot(df, aes(x = weight)) +
 
 <br>
 
-The **likelihood** of a distribution with mean = 30 and standard deviation = 1 given an observation = 28 is the y-axis value of our normal probability density function from the observed data point. Mathematically:
-
-$L(N(30, 1)~|~X=28)$ We can get the y-axis value using `dnorm`
+The **likelihood** of a distribution with mean = 30 and standard deviation = 1 given an observation = 28 is the y-axis value of our normal probability density function from the observed data point i.e., $L(N(30, 1)~|~X=28)$. We can get the y-axis value using `dnorm`
 
 ```{r, warning=FALSE, message=FALSE}
 density_value <- dnorm(x = cutoff, mean = 30, sd = 1)
@@ -59,8 +51,8 @@ ggplot(df, aes(x = weight)) +
 
 Simply put, a probability is area under the curve in a fixed distribution and mathematically we say:
 
-$P(Data|Distribution)$
+$$P(Data|Distribution)$$
 
 A likelihood is is a y-axis value for a fixed data point with distributions that can be moved and mathematically we say:
 
-$P(Distribution|Data)$
+$$P(Distribution|Data)$$
