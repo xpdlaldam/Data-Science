@@ -33,6 +33,7 @@ navbar:
         - text: "Central Limit Theorem"
           href: clt.html
           
+          
 output:
   html_document:
     theme: cosmo

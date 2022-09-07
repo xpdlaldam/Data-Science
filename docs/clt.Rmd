@@ -16,6 +16,7 @@ Central Limit Theorem (CLT) is one of the most powerful yet simple concept in st
 
 \end{aligned}
 ```
+
 ```{=tex}
 \begin{aligned} 
 
