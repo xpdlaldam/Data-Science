@@ -32,6 +32,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -267,6 +269,9 @@ $(document).ready(function () {
     <li>
       <a href="regularized.html">Regularized Linear Models</a>
     </li>
+    <li>
+      <a href="trees.html">Decision Trees</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -286,10 +291,10 @@ $(document).ready(function () {
       <a href="probvslike.html">Probability vs Likelihood</a>
     </li>
     <li>
-      <a href="clt.html">Central Limit Theorem</a>
+      <a href="mle.html">MLE</a>
     </li>
     <li>
-      <a href="mle.html">MLE</a>
+      <a href="clt.html">Central Limit Theorem</a>
     </li>
   </ul>
 </li>
@@ -330,92 +335,196 @@ df &lt;- data.frame(metric1, id, date)
 
 df_spread &lt;- df %&gt;% tidyr::pivot_wider(names_from = date, values_from = metric1)</code></pre>
 <pre class="r"><code># Before piot_wider()
-knitr::kable(df)</code></pre>
-<table>
+knitr::kable(df, align = &quot;c&quot;, caption = &quot;&lt;center&gt;Table 1&lt;/center&gt;&quot;) %&gt;% 
+  kableExtra::kable_styling(position = &quot;center&quot;, full_width = F) </code></pre>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<center>
+Table 1
+</center>
+</caption>
 <thead>
-<tr class="header">
-<th align="right">metric1</th>
-<th align="left">id</th>
-<th align="left">date</th>
+<tr>
+<th style="text-align:center;">
+metric1
+</th>
+<th style="text-align:center;">
+id
+</th>
+<th style="text-align:center;">
+date
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="right">15.3</td>
-<td align="left">A01</td>
-<td align="left">2022-01-01</td>
+<tr>
+<td style="text-align:center;">
+15.3
+</td>
+<td style="text-align:center;">
+A01
+</td>
+<td style="text-align:center;">
+2022-01-01
+</td>
 </tr>
-<tr class="even">
-<td align="right">14.7</td>
-<td align="left">A01</td>
-<td align="left">2022-01-02</td>
+<tr>
+<td style="text-align:center;">
+14.7
+</td>
+<td style="text-align:center;">
+A01
+</td>
+<td style="text-align:center;">
+2022-01-02
+</td>
 </tr>
-<tr class="odd">
-<td align="right">15.2</td>
-<td align="left">A01</td>
-<td align="left">2022-01-03</td>
+<tr>
+<td style="text-align:center;">
+15.2
+</td>
+<td style="text-align:center;">
+A01
+</td>
+<td style="text-align:center;">
+2022-01-03
+</td>
 </tr>
-<tr class="even">
-<td align="right">13.8</td>
-<td align="left">B01</td>
-<td align="left">2022-01-01</td>
+<tr>
+<td style="text-align:center;">
+13.8
+</td>
+<td style="text-align:center;">
+B01
+</td>
+<td style="text-align:center;">
+2022-01-01
+</td>
 </tr>
-<tr class="odd">
-<td align="right">15.4</td>
-<td align="left">B01</td>
-<td align="left">2022-01-02</td>
+<tr>
+<td style="text-align:center;">
+15.4
+</td>
+<td style="text-align:center;">
+B01
+</td>
+<td style="text-align:center;">
+2022-01-02
+</td>
 </tr>
-<tr class="even">
-<td align="right">14.8</td>
-<td align="left">B01</td>
-<td align="left">2022-01-03</td>
+<tr>
+<td style="text-align:center;">
+14.8
+</td>
+<td style="text-align:center;">
+B01
+</td>
+<td style="text-align:center;">
+2022-01-03
+</td>
 </tr>
-<tr class="odd">
-<td align="right">14.9</td>
-<td align="left">B02</td>
-<td align="left">2022-01-01</td>
+<tr>
+<td style="text-align:center;">
+14.9
+</td>
+<td style="text-align:center;">
+B02
+</td>
+<td style="text-align:center;">
+2022-01-01
+</td>
 </tr>
-<tr class="even">
-<td align="right">15.1</td>
-<td align="left">B02</td>
-<td align="left">2022-01-02</td>
+<tr>
+<td style="text-align:center;">
+15.1
+</td>
+<td style="text-align:center;">
+B02
+</td>
+<td style="text-align:center;">
+2022-01-02
+</td>
 </tr>
-<tr class="odd">
-<td align="right">15.9</td>
-<td align="left">B02</td>
-<td align="left">2022-01-03</td>
+<tr>
+<td style="text-align:center;">
+15.9
+</td>
+<td style="text-align:center;">
+B02
+</td>
+<td style="text-align:center;">
+2022-01-03
+</td>
 </tr>
 </tbody>
 </table>
 <pre class="r"><code># After piot_wider()
-knitr::kable(df_spread)</code></pre>
-<table>
+knitr::kable(df_spread, align = &quot;c&quot;, caption = &quot;&lt;center&gt;Table 2&lt;/center&gt;&quot;) %&gt;% 
+  kableExtra::kable_styling(position = &quot;center&quot;, full_width = F) </code></pre>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<center>
+Table 2
+</center>
+</caption>
 <thead>
-<tr class="header">
-<th align="left">id</th>
-<th align="right">2022-01-01</th>
-<th align="right">2022-01-02</th>
-<th align="right">2022-01-03</th>
+<tr>
+<th style="text-align:center;">
+id
+</th>
+<th style="text-align:center;">
+2022-01-01
+</th>
+<th style="text-align:center;">
+2022-01-02
+</th>
+<th style="text-align:center;">
+2022-01-03
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">A01</td>
-<td align="right">15.3</td>
-<td align="right">14.7</td>
-<td align="right">15.2</td>
+<tr>
+<td style="text-align:center;">
+A01
+</td>
+<td style="text-align:center;">
+15.3
+</td>
+<td style="text-align:center;">
+14.7
+</td>
+<td style="text-align:center;">
+15.2
+</td>
 </tr>
-<tr class="even">
-<td align="left">B01</td>
-<td align="right">13.8</td>
-<td align="right">15.4</td>
-<td align="right">14.8</td>
+<tr>
+<td style="text-align:center;">
+B01
+</td>
+<td style="text-align:center;">
+13.8
+</td>
+<td style="text-align:center;">
+15.4
+</td>
+<td style="text-align:center;">
+14.8
+</td>
 </tr>
-<tr class="odd">
-<td align="left">B02</td>
-<td align="right">14.9</td>
-<td align="right">15.1</td>
-<td align="right">15.9</td>
+<tr>
+<td style="text-align:center;">
+B02
+</td>
+<td style="text-align:center;">
+14.9
+</td>
+<td style="text-align:center;">
+15.1
+</td>
+<td style="text-align:center;">
+15.9
+</td>
 </tr>
 </tbody>
 </table>

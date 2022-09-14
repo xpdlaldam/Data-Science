@@ -23,11 +23,13 @@ df_spread <- df %>% tidyr::pivot_wider(names_from = date, values_from = metric1)
 
 ```
 
-```{r}
+```{r message=FALSE, warning=FALSE, results='asis', tidy=F}
 # Before piot_wider()
-knitr::kable(df)
+knitr::kable(df, align = "c", caption = "<center>Table 1</center>") %>% 
+  kableExtra::kable_styling(position = "center", full_width = F) 
 
 # After piot_wider()
-knitr::kable(df_spread)
+knitr::kable(df_spread, align = "c", caption = "<center>Table 2</center>") %>% 
+  kableExtra::kable_styling(position = "center", full_width = F) 
 
 ```

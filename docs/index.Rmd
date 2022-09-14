@@ -7,3 +7,5 @@ output: html_document
 
 Hi, I am Seunghoon a full time Data Analyst at a biochemical company based in Wisconsin with 3+ years of professional experience.
 
+rmarkdown::render_site()
+

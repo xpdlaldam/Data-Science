@@ -14,10 +14,12 @@ navbar:
       menu:
         - text: "Regularized Linear Models"
           href: regularized.html
+          
+        - text: "Decision Trees"
+          href: trees.html
         
     - text: "Statistics"
       menu:
-        
         - text: "Misconceptions About CIs"
           href: ci.html
         

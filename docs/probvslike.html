@@ -267,6 +267,9 @@ $(document).ready(function () {
     <li>
       <a href="regularized.html">Regularized Linear Models</a>
     </li>
+    <li>
+      <a href="trees.html">Decision Trees</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -286,10 +289,10 @@ $(document).ready(function () {
       <a href="probvslike.html">Probability vs Likelihood</a>
     </li>
     <li>
-      <a href="clt.html">Central Limit Theorem</a>
+      <a href="mle.html">MLE</a>
     </li>
     <li>
-      <a href="mle.html">MLE</a>
+      <a href="clt.html">Central Limit Theorem</a>
     </li>
   </ul>
 </li>
@@ -328,8 +331,8 @@ df &lt;- data.frame(weight = rnorm(n = 1000000, mean = m, sd = std))
 cutoff  &lt;- quantile(df$weight, .05)
 
 pnorm(cutoff, mean = m , sd = std) # Check area under the curve that&#39;s below the cutoff (pnorm() returns area under the curve)</code></pre>
-<pre><code>##        5% 
-## 0.0500904</code></pre>
+<pre><code>##         5% 
+## 0.04976219</code></pre>
 <pre class="r"><code>g1 &lt;- ggplot(df, aes(x = weight)) +
   geom_density() +
   stat_function(fun = dnorm, args = list(mean = m, sd = std), xlim = c(min(df$weight), cutoff), geom = &quot;area&quot;) +

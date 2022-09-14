@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Decision Trees</title>
+
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="site_libs/viz-1.8.2/viz.js"></script>
+<link href="site_libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
+<script src="site_libs/grViz-binding-1.0.9/grViz.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    R
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="pivotwider.html">tidyr</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Machine Learning
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="regularized.html">Regularized Linear Models</a>
+    </li>
+    <li>
+      <a href="trees.html">Decision Trees</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Statistics
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="ci.html">Misconceptions About CIs</a>
+    </li>
+    <li>
+      <a href="pvalue.html">P-value</a>
+    </li>
+    <li>
+      <a href="probvslike.html">Probability vs Likelihood</a>
+    </li>
+    <li>
+      <a href="mle.html">MLE</a>
+    </li>
+    <li>
+      <a href="clt.html">Central Limit Theorem</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Decision Trees</h1>
+
+</div>
+
+
+<p>Decision Trees have become a popular algorithm for modern machine
+learning models. There are two types of a Decision Tree: A
+<strong>Classification Tree</strong> where the statements are classified
+into text categories and a <strong>Regression Tree</strong> where
+statements are numbers. This is an example of a Classification Tree:</p>
+<pre class="r"><code>library(DiagrammeR)
+
+grViz(&#39;
+digraph {
+forcelabels=true;
+node [];
+    {
+        &quot;Are you happy?&quot;  -&gt; Party [xlabel = &quot;True    &quot;];
+        &quot;Are you happy?&quot; -&gt; &quot;Take a nap&quot; [xlabel = &quot;       False     &quot;];
+    }
+}&#39;)</code></pre>
+<div id="htmlwidget-9ef59c249b9e490b1abf" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-9ef59c249b9e490b1abf">{"x":{"diagram":"\ndigraph {\nforcelabels=true;\nnode [];\n    {\n        \"Are you happy?\"  -> Party [xlabel = \"True    \"];\n        \"Are you happy?\" -> \"Take a nap\" [xlabel = \"       False     \"];\n    }\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<p>A Regression tree looks like:</p>
+<pre class="r"><code>library(data.tree)
+tree &lt;- Node$new(&quot;Subject &gt; 100 lbs?&quot;)
+  leaf1 &lt;- tree$AddChild(&quot;Subject &gt; 5 ft tall?&quot;)
+  leaf2 &lt;- tree$AddChild(&quot;Subject &lt;= 5 ft tall?&quot;)
+plot(tree)</code></pre>
+<div id="htmlwidget-b73535f38976ccd9ba4b" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-b73535f38976ccd9ba4b">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Subject > 100 lbs?\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Subject > 5 ft tall?\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Subject <= 5 ft tall?\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"3\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<p>We will first go over the details of Classification Trees. Note that
+a Classification Tree can have a mix of numeric and categorical
+statements. Also, it can have the same numeric variable with different
+inequalities. From now on we will proceed to the left arrow if the
+condition is <code>True</code> and proceed to the right otherwise.</p>
+<p>Let’s say we have the following data:</p>
+<pre class="r"><code>smoking &lt;- c(&quot;yes&quot;, &quot;yes&quot;, &quot;yes&quot;, &quot;no&quot;, &quot;no&quot;)
+diabetes &lt;- c(&quot;yes&quot;, &quot;yes&quot;, &quot;no&quot;, &quot;yes&quot;, &quot;no&quot;)
+age &lt;- c(19, 21, 23, 27, 31)
+cancer &lt;- c(&quot;yes&quot;, &quot;no&quot;, &quot;no&quot;, &quot;yes&quot;, &quot;no&quot;)
+df &lt;- data.frame(smoking, diabetes, age, cancer)
+
+library(dplyr)
+knitr::kable(df, align = &quot;c&quot;, caption = &quot;&lt;center&gt;Table 1&lt;/center&gt;&quot;) %&gt;% 
+  kableExtra::kable_styling(position = &quot;center&quot;, full_width = F) </code></pre>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<center>
+Table 1
+</center>
+</caption>
+<thead>
+<tr>
+<th style="text-align:center;">
+smoking
+</th>
+<th style="text-align:center;">
+diabetes
+</th>
+<th style="text-align:center;">
+age
+</th>
+<th style="text-align:center;">
+cancer
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+yes
+</td>
+<td style="text-align:center;">
+yes
+</td>
+<td style="text-align:center;">
+19
+</td>
+<td style="text-align:center;">
+yes
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+yes
+</td>
+<td style="text-align:center;">
+yes
+</td>
+<td style="text-align:center;">
+21
+</td>
+<td style="text-align:center;">
+no
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+yes
+</td>
+<td style="text-align:center;">
+no
+</td>
+<td style="text-align:center;">
+23
+</td>
+<td style="text-align:center;">
+no
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+no
+</td>
+<td style="text-align:center;">
+yes
+</td>
+<td style="text-align:center;">
+27
+</td>
+<td style="text-align:center;">
+yes
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+no
+</td>
+<td style="text-align:center;">
+no
+</td>
+<td style="text-align:center;">
+31
+</td>
+<td style="text-align:center;">
+no
+</td>
+</tr>
+</tbody>
+</table>
+<p>We will make a classification tree from scratch that predicts if a
+patient will get cancer or not. Firstly, we need to decide which column
+will be the root node or the top of the tree. We analyze columns one by
+one with our cancer <code>response</code>.</p>
+<pre class="r"><code>tree &lt;- Node$new(&quot;Smoking?&quot;)
+  leaf1 &lt;- tree$AddChild(&quot;Cancer \n yes: 1 \n no: 2&quot;)
+  leaf2 &lt;- tree$AddChild(&quot;Cancer \n yes: 1 \n no: 1&quot;)
+plot(tree)</code></pre>
+<div id="htmlwidget-e5fceb0f4541cdbbed56" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-e5fceb0f4541cdbbed56">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Smoking?\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Cancer \n yes: 1 \n no: 2\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Cancer \n yes: 1 \n no: 1\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"3\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<p>The way I calculated the number for yes and no is just by following
+the category for <code>cancer</code> row by row. Starting with
+<code>smoking</code> and <code>cancer</code>, the first row has
+<code>yes</code> for <code>smoking</code> and <code>yes</code> for
+<code>cancer</code> so we increment 1 to the <code>yes</code> part of
+the left leaf node. We do the same thing until we reach the last row.
+Note the distribution of <code>yes</code> and <code>no</code> for both
+leaf nodes: it has at least one or more count for <code>yes</code> and
+<code>no</code>. We call such trees <code>impure</code>.</p>
+<p>Next, let’s compare <code>diabetes</code> and
+<code>cancer</code>:</p>
+<pre class="r"><code>tree &lt;- Node$new(&quot;Diabetes?&quot;)
+  leaf1 &lt;- tree$AddChild(&quot;Cancer \n yes: 2 \n no: 1&quot;)
+  leaf2 &lt;- tree$AddChild(&quot;Cancer \n yes: 0 \n no: 2&quot;)
+plot(tree)</code></pre>
+<div id="htmlwidget-62ae283d5883afa09790" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-62ae283d5883afa09790">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Diabetes?\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Cancer \n yes: 2 \n no: 1\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Cancer \n yes: 0 \n no: 2\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"3\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<p>So this tree is less <code>impure</code> than the first one as you
+can see from the right leaf: all of them are classified into
+<code>no</code>. To quantify this <code>impurity</code>, we will use
+<strong>Gini Impurity</strong>. The <strong>Gini Impurity</strong> for
+the left leave of the first tree is: <span
+class="math display">\[1-P(Yes^2)-P(No^2)=1-
+(\frac{1}{3})^2-(\frac{2}{3})^2=0.44\]</span> The <strong>Gini
+Impurity</strong> for the right leave of the first tree is: <span
+class="math display">\[1- (\frac{1}{2})^2-(\frac{1}{2})^2=0.50\]</span>
+Note that the first leaf has 3 samples out of the total 5 and 2 out of 5
+for the other leaf. We have different number of observations in the
+leaves. So we need to get the weighted average of the two Gini
+Impurities: <span class="math display">\[0.44 * \frac{3}{5} + 0.5 *
+\frac{2}{5}=0.464\]</span></p>
+<p>Now let’s calculate the <strong>Gini Impurity</strong> for our second
+tree. The left tree is: <span class="math display">\[1-
+(\frac{2}{3})^2-(\frac{1}{3})^2=0.44\]</span> The right tree is:
+1-(4/9)-(1/9) <span class="math display">\[1 - (\frac{0}{2})^2 -
+(\frac{2}{2})^2=0\]</span></p>
+<p>Finally, the weighted average: .44*(3/5) <span
+class="math display">\[0.44 * \frac{3}{5} + 0 *
+\frac{2}{5}=0.264\]</span> Because 0.264 is smaller than 0.464, the
+second tree has less impurity.</p>
+<p>To calculate the <strong>Gini Impurity</strong> for our numeric
+variable <code>age</code>, it is slightly different. We first order the
+variable in ascending order. Then we compute the mean for all
+neighboring rows:</p>
+<p><span class="math display">\[(19+21)/2=20\]</span> <span
+class="math display">\[(22+23)/2=22\]</span> <span
+class="math display">\[(23+27)/2=25\]</span> <span
+class="math display">\[(27+31)/2=29\]</span> Next, we calculate the
+<strong>Gini Impurity</strong> for all of these four with the root node
+being <code>age</code> less than the four averages, respectively. We
+start with <code>age</code> &lt; 20:</p>
+<pre class="r"><code>tree &lt;- Node$new(&quot;Age &lt; 20&quot;)
+  leaf1 &lt;- tree$AddChild(&quot;Cancer \n yes: 1 \n no: 0&quot;)
+  leaf2 &lt;- tree$AddChild(&quot;Cancer \n yes: 1 \n no: 3&quot;)
+plot(tree)</code></pre>
+<div id="htmlwidget-a868c8643e2c20c85aef" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-a868c8643e2c20c85aef">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Age < 20\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Cancer \n yes: 1 \n no: 0\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Cancer \n yes: 1 \n no: 3\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"3\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<p>Gini Impurity for the left leave is 0 and the right is <span
+class="math inline">\(1 - (\frac{1}{4})^2 - (\frac{3}{4})^2=0.375 =&gt;
+Weighted ~ Gini ~ Impurity=0 + 0.375(\frac{4}{5})^2=0.3\)</span>.</p>
+<p>Likewise, we get 0.38, 0.38, 0.4 for the remaining three averages.
+From these four Gini Impurities we choose the minimum (<code>age</code>
+&lt; 20) which is 0.3. We are now ready to choose which variable will be
+selected as the root. Among 0.4640, .264 and 0.3 the least is 0.264,
+hence we choose diabetes.</p>
+<p>Now the updated tree will look like based on the bold rows of
+<code>Table 2</code>:</p>
+<pre class="r"><code>tree &lt;- Node$new(&quot;Diabetes&quot;)
+  leaf1 &lt;- tree$AddChild(&quot;Cancer \n yes: 2 \n no: 1&quot;)
+  leaf2 &lt;- tree$AddChild(&quot;Cancer \n yes: 0 \n no: 2&quot;)
+plot(tree)</code></pre>
+<div id="htmlwidget-f1e8a998c2c44cf306c9" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-f1e8a998c2c44cf306c9">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Diabetes\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Cancer \n yes: 2 \n no: 1\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Cancer \n yes: 0 \n no: 2\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"3\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<p>The cancer distribution for ‘diabetes == yes’ (the left leaf) are
+represented as bold font:</p>
+<pre class="r"><code>knitr::kable(df, align = &quot;c&quot;, caption = &quot;&lt;center&gt;Table 2&lt;/center&gt;&quot;) %&gt;% 
+  kableExtra::kable_styling(position = &quot;center&quot;, full_width = F) %&gt;% 
+  kableExtra::row_spec(c(1, 2, 4), bold=T) # , hline_after = T</code></pre>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<center>
+Table 2
+</center>
+</caption>
+<thead>
+<tr>
+<th style="text-align:center;">
+smoking
+</th>
+<th style="text-align:center;">
+diabetes
+</th>
+<th style="text-align:center;">
+age
+</th>
+<th style="text-align:center;">
+cancer
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+yes
+</td>
+<td style="text-align:center;font-weight: bold;">
+yes
+</td>
+<td style="text-align:center;font-weight: bold;">
+19
+</td>
+<td style="text-align:center;font-weight: bold;">
+yes
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+yes
+</td>
+<td style="text-align:center;font-weight: bold;">
+yes
+</td>
+<td style="text-align:center;font-weight: bold;">
+21
+</td>
+<td style="text-align:center;font-weight: bold;">
+no
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+yes
+</td>
+<td style="text-align:center;">
+no
+</td>
+<td style="text-align:center;">
+23
+</td>
+<td style="text-align:center;">
+no
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+no
+</td>
+<td style="text-align:center;font-weight: bold;">
+yes
+</td>
+<td style="text-align:center;font-weight: bold;">
+27
+</td>
+<td style="text-align:center;font-weight: bold;">
+yes
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+no
+</td>
+<td style="text-align:center;">
+no
+</td>
+<td style="text-align:center;">
+31
+</td>
+<td style="text-align:center;">
+no
+</td>
+</tr>
+</tbody>
+</table>
+<p>We don’t have to do anything to the right leaf as the node has zero
+Impurity. However the left leaf is still impure. Thus, we need to check
+once again to see if we can reduce the Impurity by comparing the
+remaining variables ‘smoke’ and ‘age’. We start with ‘smoke’.</p>
+<p>Of the rows having ‘diabetes == yes’, the Gini Impurity for ‘smoke’
+is <span class="math inline">\(1/3\)</span>:</p>
+<pre class="r"><code>tree &lt;- Node$new(&quot;Smoke&quot;)
+  leaf1 &lt;- tree$AddChild(&quot;Cancer \n yes: 1 \n no: 1&quot;)
+  leaf2 &lt;- tree$AddChild(&quot;Cancer \n yes: 1 \n no: 0&quot;)
+plot(tree)</code></pre>
+<div id="htmlwidget-3d6ec894ebae5f753991" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3d6ec894ebae5f753991">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Smoke\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Cancer \n yes: 1 \n no: 1\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Cancer \n yes: 1 \n no: 0\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"3\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<p>Next, of the three rows having ‘diabetes == yes’, the Gini Impurity
+for ‘age’ is also <span class="math inline">\(1/3\)</span>:</p>
+<pre class="r"><code>tree &lt;- Node$new(&quot;Smoke&quot;)
+  leaf1 &lt;- tree$AddChild(&quot;Cancer \n yes: 1 \n no: 1&quot;)
+  leaf2 &lt;- tree$AddChild(&quot;Cancer \n yes: 1 \n no: 0&quot;)
+plot(tree)</code></pre>
+<div id="htmlwidget-7549d0c5b437a3d9f4e2" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-7549d0c5b437a3d9f4e2">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Smoke\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Cancer \n yes: 1 \n no: 1\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Cancer \n yes: 1 \n no: 0\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"3\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<p>Since both Gini Impurities are <span
+class="math inline">\(1/3\)</span>, we can choose anything. We will pick
+‘smoke’. Again our updated tree is:</p>
+<pre class="r"><code>root &lt;- Node$new(&quot;Diabetes&quot;)
+  leaf1 &lt;- root$AddChild(&quot;Smoke&quot;)
+    leaf1_1 &lt;- leaf1$AddChild(&quot;Cancer \n yes: 1 \n no: 1&quot;)
+    leaf1_2 &lt;- leaf1$AddChild(&quot;Cancer \n yes: 1 \n no: 0&quot;)
+  leaf2 &lt;- root$AddChild(&quot;Cancer \n yes: 0 \n no: 2&quot;)
+plot(root)</code></pre>
+<div id="htmlwidget-0fe85540f32ae40c8e45" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-0fe85540f32ae40c8e45">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Diabetes\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Smoke\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Cancer \n yes: 1 \n no: 1\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"4\" [label = \"Cancer \n yes: 1 \n no: 0\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"5\" [label = \"Cancer \n yes: 0 \n no: 2\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"5\" \n  \"2\"->\"3\" \n  \"2\"->\"4\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<p>We still have one more left leave that is still impure. We foucs on
+the rows when ‘diabetes == yes’ and ‘smoke == yes’:</p>
+<pre class="r"><code>knitr::kable(df, align = &quot;c&quot;, caption = &quot;&lt;center&gt;Table 2&lt;/center&gt;&quot;) %&gt;% 
+  kableExtra::kable_styling(position = &quot;center&quot;, full_width = F) %&gt;% 
+  kableExtra::row_spec(c(1, 2), bold=T) </code></pre>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<center>
+Table 2
+</center>
+</caption>
+<thead>
+<tr>
+<th style="text-align:center;">
+smoking
+</th>
+<th style="text-align:center;">
+diabetes
+</th>
+<th style="text-align:center;">
+age
+</th>
+<th style="text-align:center;">
+cancer
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+yes
+</td>
+<td style="text-align:center;font-weight: bold;">
+yes
+</td>
+<td style="text-align:center;font-weight: bold;">
+19
+</td>
+<td style="text-align:center;font-weight: bold;">
+yes
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;">
+yes
+</td>
+<td style="text-align:center;font-weight: bold;">
+yes
+</td>
+<td style="text-align:center;font-weight: bold;">
+21
+</td>
+<td style="text-align:center;font-weight: bold;">
+no
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+yes
+</td>
+<td style="text-align:center;">
+no
+</td>
+<td style="text-align:center;">
+23
+</td>
+<td style="text-align:center;">
+no
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+no
+</td>
+<td style="text-align:center;">
+yes
+</td>
+<td style="text-align:center;">
+27
+</td>
+<td style="text-align:center;">
+yes
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+no
+</td>
+<td style="text-align:center;">
+no
+</td>
+<td style="text-align:center;">
+31
+</td>
+<td style="text-align:center;">
+no
+</td>
+</tr>
+</tbody>
+</table>
+<p>and the updated tree:</p>
+<pre class="r"><code>root &lt;- Node$new(&quot;Diabetes&quot;)
+  leaf1 &lt;- root$AddChild(&quot;Smoke&quot;)
+    leaf1_1 &lt;- leaf1$AddChild(&quot;Age &lt; 20&quot;)
+      leaf1_1_1 &lt;- leaf1_1$AddChild(&quot;Cancer \n yes: 1 \n no: 0&quot;)
+      leaf1_1_2 &lt;- leaf1_1$AddChild(&quot;Cancer \n yes: 0 \n no: 1&quot;)
+    leaf1_2 &lt;- leaf1$AddChild(&quot;Cancer \n yes: 1 \n no: 0&quot;)
+  leaf2 &lt;- root$AddChild(&quot;Cancer \n yes: 0 \n no: 2&quot;)
+plot(root)</code></pre>
+<div id="htmlwidget-03b4a3d4e862b9a66799" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-03b4a3d4e862b9a66799">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Diabetes\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Smoke\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Age < 20\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"4\" [label = \"Cancer \n yes: 1 \n no: 0\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"5\" [label = \"Cancer \n yes: 0 \n no: 1\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"6\" [label = \"Cancer \n yes: 1 \n no: 0\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"7\" [label = \"Cancer \n yes: 0 \n no: 2\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"7\" \n  \"2\"->\"3\" \n  \"2\"->\"6\" \n  \"3\"->\"4\" \n  \"3\"->\"5\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<p>Now all of the leaves are pure.</p>
+<p>Lastly, we need to have a final output from all leaves. In general,
+we pick the maximum value between ‘yes’ and ‘no’. Thus, the final tree
+is:</p>
+<pre class="r"><code>root &lt;- Node$new(&quot;Diabetes&quot;)
+  leaf1 &lt;- root$AddChild(&quot;Smoke&quot;)
+    leaf1_1 &lt;- leaf1$AddChild(&quot;Age &lt; 20&quot;)
+      leaf1_1_1 &lt;- leaf1_1$AddChild(&quot;Cancer&quot;)
+      leaf1_1_2 &lt;- leaf1_1$AddChild(&quot;No Cancer&quot;)
+    leaf1_2 &lt;- leaf1$AddChild(&quot;Cancer&quot;)
+  leaf2 &lt;- root$AddChild(&quot;No Cancer&quot;)
+plot(root)</code></pre>
+<div id="htmlwidget-19e6269a458ea4ddc610" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-19e6269a458ea4ddc610">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Diabetes\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Smoke\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Age < 20\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"4\" [label = \"Cancer\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"5\" [label = \"No Cancer\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"6\" [label = \"Cancer\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"7\" [label = \"No Cancer\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"7\" \n  \"2\"->\"3\" \n  \"2\"->\"6\" \n  \"3\"->\"4\" \n  \"3\"->\"5\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<p>We can now predict/classify with new data. If we have a new patient
+having:</p>
+<pre class="r"><code>smoking &lt;- c(&quot;no&quot;)
+diabetes &lt;- c(&quot;yes&quot;)
+age &lt;- c(32)
+df_new &lt;- data.frame(smoking, diabetes, age)
+
+knitr::kable(df_new, align = &quot;c&quot;, caption = &quot;&lt;center&gt;Table 3&lt;/center&gt;&quot;) %&gt;% 
+  kableExtra::kable_styling(position = &quot;center&quot;, full_width = F) </code></pre>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<center>
+Table 3
+</center>
+</caption>
+<thead>
+<tr>
+<th style="text-align:center;">
+smoking
+</th>
+<th style="text-align:center;">
+diabetes
+</th>
+<th style="text-align:center;">
+age
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+no
+</td>
+<td style="text-align:center;">
+yes
+</td>
+<td style="text-align:center;">
+32
+</td>
+</tr>
+</tbody>
+</table>
+<p>We classify this patient as getting cancer.</p>
+<p>One last note: Look how few classifications were made on the leaves.
+This can be an issue since the tree model we built may have been overfit
+which will not generalize well to incoming data. There are two
+solutions:</p>
+<ol style="list-style-type: decimal">
+<li><p>Pruning</p></li>
+<li><p>Requiring a minimum number of classification even though a leaf
+remains impure e.g., we could have stopped at the left leaf:</p></li>
+</ol>
+<pre class="r"><code>root &lt;- Node$new(&quot;Diabetes&quot;)
+  leaf1 &lt;- root$AddChild(&quot;Cancer \n yes: 1 \n no: 1&quot;)
+  leaf2 &lt;- root$AddChild(&quot;Cancer \n yes: 0 \n no: 2&quot;)
+plot(root)</code></pre>
+<div id="htmlwidget-1da397a0214af2e5b31b" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1da397a0214af2e5b31b">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Diabetes\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Cancer \n yes: 1 \n no: 1\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Cancer \n yes: 0 \n no: 2\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"3\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<p>So the left leaf is classified as <code>cancer</code>. To determine
+this number, we use cross validation to select the best one.</p>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
