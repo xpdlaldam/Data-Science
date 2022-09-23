@@ -11,7 +11,7 @@ First, we will discuss Ridge Regression. But beofre that let's first go through 
 
 $$min\sum_{i=1}^{n} (\hat y - y)^2$$
 
-The loss function for Ridge Regression is: $$ min \sum_{i=1}^{n} (\hat{y} - y)^2 + \lambda \sum_{i=1}^{m} w_i $$ The added regularization term in Ridge Regression is called the $l2$-norm which acts as a penalty to Linear Regression. In other words, Ridge Regression introduces a small bias. Why? In return for the bias, we can achieve reduced variance. We call this the bias-variance tradeoff. If the model has a high variance, it'll probably not generalize well for unseen future data points.
+The loss function for Ridge Regression is: $$ min \sum_{i=1}^{n} (\hat{y} - y)^2 + \lambda \sum_{i=1}^{m} w_i $$ The added regularization term in Ridge Regression is called the $l2$-norm which acts as a penalty to Linear Regression. In other words, Ridge Regression introduces a small bias which will make a slightly worse fit. Why? In return for the bias, we can achieve reduced variance that will make the model generalize well for new data. We call this the bias-variance trade-off. If the model has a high variance, it'll probably not generalize well for unseen future data points.
 
 This is why Ridge Regression is a **regularized** linear model.
 
@@ -80,8 +80,7 @@ Next, we have Lasso Regression. Like Ridge Regression, it is another regularized
 
 $$ min \sum_{i=1}^{n} (\hat{y} - y)^2 + \lambda \sum_{i=1}^{m} |w_i| $$ The new regularization term is called the $l1$-norm. The difference becomes clear by checking visually:
 
-![Plot from <https://towardsdatascience.com/ridge-and-lasso-regression-a-complete-guide-with-python-scikit-learn-e20e34bcbf0b>](imgs/lasso_img.png)
-
+![Plot from <https://towardsdatascience.com/ridge-and-lasso-regression-a-complete-guide-with-python-scikit-learn-e20e34bcbf0b>](imgs/regularized_img1.png)
 The first point where the elliptical contours touch the region of constraints is how the coefficients from both Ridge and Lasso Regression are determined. Unlike the circular shape of Ridge, Lasso has corners. Hence, if the contour hits the corners, the feature(s) will disappear. Thus, Lasso can perform variable selection, hence the name **Least Absolute Shrinkage and Selection Operator**.
 
 If we fit using the same `X` and `y` data:

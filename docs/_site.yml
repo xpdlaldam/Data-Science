@@ -14,9 +14,14 @@ navbar:
       menu:
         - text: "Regularized Linear Models"
           href: regularized.html
+        
+        - text: "Trees"
+          menu:
+          - text: "Decision Trees Concept"
+            href: trees.html
           
-        - text: "Decision Trees"
-          href: trees.html
+          - text: "Classification Trees"
+            href: classtree.html
         
     - text: "Statistics"
       menu:
