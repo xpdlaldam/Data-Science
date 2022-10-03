@@ -22,6 +22,9 @@ navbar:
           
           - text: "Classification Trees"
             href: classtree.html
+          
+        - text: "PCA"
+          href: pca.html
         
     - text: "Statistics"
       menu:

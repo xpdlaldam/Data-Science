@@ -20,7 +20,7 @@ cutoff  <- quantile(df$weight, .05)
 
 pnorm(cutoff, mean = m , sd = std) # Check area under the curve that's below the cutoff (pnorm() returns area under the curve)
 
-g1 <- ggplot(df, aes(x = weight)) +
+ggplot(df, aes(x = weight)) +
   geom_density() +
   stat_function(fun = dnorm, args = list(mean = m, sd = std), xlim = c(min(df$weight), cutoff), geom = "area") +
   theme_classic() +
@@ -33,7 +33,6 @@ The **likelihood** of a distribution with mean = 30 and standard deviation = 1 g
 
 ```{r, warning=FALSE, message=FALSE}
 density_value <- dnorm(x = cutoff, mean = 30, sd = 1)
-
 ```
 
 ```{r, warning=FALSE, message=FALSE}

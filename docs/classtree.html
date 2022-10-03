@@ -278,6 +278,9 @@ $(document).ready(function () {
         </li>
       </ul>
     </li>
+    <li>
+      <a href="pca.html">PCA</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -376,20 +379,23 @@ tree.plot_tree(
   rounded = True
   )
 plt.show()</code></pre>
-<p><img src="classtree_files/figure-html/unnamed-chunk-3-3.png" width="672" />
-* <code>color_intensity &lt;= 3.82</code>: threshold that separates into
-different nodes * <code>gini</code>: Gini Impurity *
-<code>samples</code>: number of observations for each node *
-<code>value</code>: number of classifications that fall into each
-group</p>
+<p><img src="classtree_files/figure-html/unnamed-chunk-3-3.png" width="672" /></p>
+<ul>
+<li><code>color_intensity &lt;= 3.82</code>: threshold that separates
+into different nodes</li>
+<li><code>gini</code>: Gini Impurity</li>
+<li><code>samples</code>: number of observations for each node</li>
+<li><code>value</code>: number of classifications that fall into each
+group</li>
+</ul>
 <p>We trained our Classification Tree and got our predictions. The last
 step is to evaluate our model but how? We use a Confusion Matrix: <img
 src="imgs/classtree_img1.png"
-alt="Plot from Figrue 6.5 of packtpub.com" /> Let’s assume we have two
-classes and let 0 be the negative class and 1 the positive class. Each
-row is an actual class and each column is the predicted class. Depending
-on how the classifications were made we divide them into four different
-categories:</p>
+alt="Plot from Figrue 6.5 of packtpub.com" /></p>
+<p>Let’s assume we have two classes and let 0 be the negative class and
+1 the positive class. Each row is an actual class and each column is the
+predicted class. Depending on how the classifications were made we
+divide them into four different categories:</p>
 <ul>
 <li><span class="math inline">\(TN =
 \frac{correctly~classified~as~negative}{negative~class}\)</span></li>
@@ -401,10 +407,10 @@ categories:</p>
 \frac{correctly~classified~as~positive}{positive~class}\)</span></li>
 </ul>
 <p>Next, we discuss three different ways from a confusion matrix to see
-how good your classification tree is<br />
-* <span class="math inline">\(Accuracy =
-\frac{TN+TP}{TN+FP+FN+TP}\)</span></p>
+how good your classification tree is:</p>
 <ul>
+<li><p><span class="math inline">\(Accuracy =
+\frac{TN+TP}{TN+FP+FN+TP}\)</span></p></li>
 <li><p><span class="math inline">\(Precision =
 \frac{TP}{FP+TP}\)</span></p></li>
 <li><p><span class="math inline">\(Recall =

@@ -57,6 +57,7 @@ tree.plot_tree(
   )
 plt.show()
 ```
+
 * `color_intensity <= 3.82`: threshold that separates into different nodes
 * `gini`: Gini Impurity
 * `samples`: number of observations for each node
@@ -64,6 +65,7 @@ plt.show()
 
 We trained our Classification Tree and got our predictions. The last step is to evaluate our model but how? We use a Confusion Matrix: 
 ![Plot from Figrue 6.5 of packtpub.com](imgs/classtree_img1.png)
+
 Let's assume we have two classes and let 0 be the negative class and 1 the positive class. Each row is an actual class and each column is the predicted class. Depending on how the classifications were made we divide them into four different categories:
 
 * $TN = \frac{correctly~classified~as~negative}{negative~class}$
@@ -71,7 +73,8 @@ Let's assume we have two classes and let 0 be the negative class and 1 the posit
 * $FN = \frac{incorrectly~classified~as~negative}{positive~class}$
 * $TP = \frac{correctly~classified~as~positive}{positive~class}$
 
-Next, we discuss three different ways from a confusion matrix to see how good your classification tree is  
+Next, we discuss three different ways from a confusion matrix to see how good your classification tree is:
+
 * $Accuracy = \frac{TN+TP}{TN+FP+FN+TP}$
 
 * $Precision = \frac{TP}{FP+TP}$

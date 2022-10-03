@@ -1,0 +1,189 @@
+---
+title: "PCA"
+output: html_document
+---
+
+Principal Component Analysis (PCA) is one of the famous dimensionality reduction methods. When your model has too many variables, PCA helps narrowing them down to two that best explains the model. Let's walk through the process one-by-one with a model that has two variables.
+
+PCA starts by computing the average (red X in plot 1) of each variable. Then we can plot the center of the data by using these averages:
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+library(ggplot2)
+library(grid)
+
+set.seed(1)
+data = MASS::mvrnorm(10, c(0,0), Sigma = matrix(c(1, .5, 2, .5), 2,2))
+data[,1] <- data[,1] - mean(data[,1]) 
+data[,2] <- data[,2] - mean(data[,2])
+df <- data.frame(x = data[,1], y = data[,2])
+
+ggplot(df, aes(x = x, y = y)) +
+  theme_classic() +
+  geom_point() +
+  annotation_custom(textGrob("X", gp = gpar(col = "blue", fontsize = 20)), xmin = mean(df$x), xmax = mean(df$x), ymin = -.63, ymax = -.63) +
+  annotation_custom(textGrob("X", gp = gpar(col = "blue", fontsize = 20)), xmin = -2.1, xmax = -2.1, ymin = mean(df$y), ymax = mean(df$y)) +
+  annotation_custom(textGrob("X", gp = gpar(col = "red", fontsize = 20)), xmin = mean(df$x), xmax = mean(df$x), ymin = mean(df$y), ymax = mean(df$y)) +
+  geom_segment(aes(x = mean(df$x), xend = mean(df$x), y = -.63, yend = mean(df$y)), color = "black", size = 1) +
+  geom_segment(aes(x = -2.1, xend = mean(df$x), y = mean(df$y), yend = mean(df$y)), color = "black", size = 1)
+```
+
+Next, we shift the data such that the center (marked as red) is at the origin. Note that the relative positions have not changed.
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+ggplot(df, aes(x = x, y = y)) +
+  theme_void() +
+  geom_point(size = 5) +
+  annotation_custom(textGrob("X", gp = gpar(col = "red", fontsize = 20)), xmin = mean(df$x), xmax = mean(df$x), ymin = mean(df$y), ymax = mean(df$y)) +
+  geom_segment(aes(x = mean(df$x), xend = mean(df$x), y = -.63, yend = 1), color = "black", size = 1) +
+  geom_segment(aes(x = -2.1, xend = 1.1, y = mean(df$y), yend = mean(df$y)), color = "black", size = 1)
+```
+
+We now find the best line that fits the samples given that the line passes the origin. 
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+pc1 <- prcomp(df)$rotation 
+slope <- pc1[2,1] / pc1[1,1] 
+
+ggplot(df, aes(x = x, y = y)) +
+  theme_void() +
+  geom_point(size = 5) +
+  annotation_custom(textGrob("X", gp = gpar(col = "red", fontsize = 20)), xmin = mean(df$x), xmax = mean(df$x), ymin = mean(df$y), ymax = mean(df$y)) +
+  geom_segment(aes(x = mean(df$x), xend = mean(df$x), y = -.63, yend = 1), color = "black", size = 1) +
+  geom_segment(aes(x = -2.1, xend = 1.1, y = mean(df$y), yend = mean(df$y)), color = "black", size = 1) +
+  geom_abline(aes(slope = slope, intercept = 0), size = 1, color = "red") +
+  coord_equal()
+```
+
+To tell how good the fit is PCA projects the samples onto the line and then either find the line that minimizes the distances from the samples to the line **or** maximizes the distances from the projected points to the origin. Although intuitively it makes sense to go with the former, PCA prefers the latter as the computation is easier. We quantify the distances by adding up the squared distances between the projected points to the origin i.e., **sum of squared distances**. The line with the largest **sum of squared distances** is called a **Principal Component** (PC). We call the sum of squared distances for PC1 the **Eigenvalue** and the square root the **Singular Value**
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+# Orthogonal lines
+orthogonal_fun <- function(inp) {
+x0 = inp[1] 
+y0 = inp[2] 
+a = slope
+b = -(1/a)
+c = 0
+d = y0 - b * x0
+x = (d-c) / (a-b)
+y = -(1/a) * x+d
+return(c(x,y))
+}
+
+orthogonal_points <- apply(df, 1, FUN = orthogonal_fun)
+
+df_with_orthogonal_pts <- data.frame(x = df[,1], y = df[,2], xend = orthogonal_points[1,], yend = orthogonal_points[2,])
+
+ggplot(df, aes(x = x, y = y)) +
+  theme_void() +
+  geom_point(size = 5) +
+  annotation_custom(textGrob("X", gp = gpar(col = "red", fontsize = 20)), xmin = mean(df$x), xmax = mean(df$x), ymin = mean(df$y), ymax = mean(df$y)) +
+  geom_segment(aes(x = mean(df$x), xend = mean(df$x), y = -.63, yend = 1), color = "black", size = 1) +
+  geom_segment(aes(x = -2.1, xend = 1.1, y = mean(df$y), yend = mean(df$y)), color = "black", size = 1) +
+  geom_abline(aes(slope = slope, intercept = 0), size = 1, color = "blue") +
+  geom_segment(data = df_with_orthogonal_pts, aes(x = x, y = y, xend = xend, yend = yend)) +
+    annotation_custom(textGrob("X", gp = gpar(col = "blue", fontsize = 20)), xmin = df_with_orthogonal_pts$xend[1], xmax = df_with_orthogonal_pts$xend[1], ymin = df_with_orthogonal_pts$yend[1], ymax = df_with_orthogonal_pts$yend[1]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "blue", fontsize = 20)), xmin = df_with_orthogonal_pts$xend[2], xmax = df_with_orthogonal_pts$xend[2], ymin = df_with_orthogonal_pts$yend[2], ymax = df_with_orthogonal_pts$yend[2]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "blue", fontsize = 20)), xmin = df_with_orthogonal_pts$xend[3], xmax = df_with_orthogonal_pts$xend[3], ymin = df_with_orthogonal_pts$yend[3], ymax = df_with_orthogonal_pts$yend[3]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "blue", fontsize = 20)), xmin = df_with_orthogonal_pts$xend[4], xmax = df_with_orthogonal_pts$xend[4], ymin = df_with_orthogonal_pts$yend[4], ymax = df_with_orthogonal_pts$yend[4]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "blue", fontsize = 20)), xmin = df_with_orthogonal_pts$xend[5], xmax = df_with_orthogonal_pts$xend[5], ymin = df_with_orthogonal_pts$yend[5], ymax = df_with_orthogonal_pts$yend[5]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "blue", fontsize = 20)), xmin = df_with_orthogonal_pts$xend[6], xmax = df_with_orthogonal_pts$xend[6], ymin = df_with_orthogonal_pts$yend[6], ymax = df_with_orthogonal_pts$yend[6]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "blue", fontsize = 20)), xmin = df_with_orthogonal_pts$xend[7], xmax = df_with_orthogonal_pts$xend[7], ymin = df_with_orthogonal_pts$yend[7], ymax = df_with_orthogonal_pts$yend[7]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "blue", fontsize = 20)), xmin = df_with_orthogonal_pts$xend[8], xmax = df_with_orthogonal_pts$xend[8], ymin = df_with_orthogonal_pts$yend[8], ymax = df_with_orthogonal_pts$yend[8]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "blue", fontsize = 20)), xmin = df_with_orthogonal_pts$xend[9], xmax = df_with_orthogonal_pts$xend[9], ymin = df_with_orthogonal_pts$yend[9], ymax = df_with_orthogonal_pts$yend[9]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "blue", fontsize = 20)), xmin = df_with_orthogonal_pts$xend[10], xmax = df_with_orthogonal_pts$xend[10], ymin = df_with_orthogonal_pts$yend[10], ymax = df_with_orthogonal_pts$yend[10])
+```
+
+Note the slope is about .30. This means for every 10 units we go along the x axis we go up 3 units along the y axis. So most of our data is spread out along the x axis, hence our x variable is more important when it comes to explaining how the data are spread out. We call this a linear combination of x and y.
+
+Instead of using the original slope, we change the x and y values by making a unit vector (divide by the slope) so that the length of the slope becomes 1. We call this unit vector the **Eigenvector** or **Singular Vector** of **PC1** and call the proportions of x and y **Loading Scores**.
+
+To get PC2, we simply draw a line perpendicular to PC1. Then like we did for PC1, we scale to get a unit vector which becomes the Eigenvector for PC2. 
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+slope_pc2 <- -1/slope
+
+orthogonal_fun <- function(inp) {
+x0 = inp[1] 
+y0 = inp[2] 
+a = slope_pc2
+b = -(1/a)
+c = 0
+d = y0 - b * x0
+x = (d-c) / (a-b)
+y = -(1/a) * x+d
+return(c(x,y))
+}
+
+orthogonal_points_pc2 <- apply(df, 1, FUN = orthogonal_fun)
+
+df_with_orthogonal_pts_pc2 <- data.frame(x = df[,1], y = df[,2], xend = orthogonal_points_pc2[1,], yend = orthogonal_points_pc2[2,])
+
+ggplot(df, aes(x = x, y = y)) +
+  theme_void() +
+  geom_point(size = 5) +
+  annotation_custom(textGrob("X", gp = gpar(col = "red", fontsize = 20)), xmin = mean(df$x), xmax = mean(df$x), ymin = mean(df$y), ymax = mean(df$y)) +
+  geom_segment(aes(x = mean(df$x), xend = mean(df$x), y = -.63, yend = 1), color = "black", size = 1) +
+  geom_segment(aes(x = -2.1, xend = 1.1, y = mean(df$y), yend = mean(df$y)), color = "black", size = 1) +
+  geom_abline(aes(slope = slope, intercept = 0), size = 1, color = "red") +
+  geom_abline(aes(slope = slope_pc2, intercept = 0), size = 1, color = "green") +
+    geom_segment(data = df_with_orthogonal_pts_pc2, aes(x = x, y = y, xend = xend, yend = yend)) +
+  annotation_custom(textGrob("X", gp = gpar(col = "green", fontsize = 20)), xmin = df_with_orthogonal_pts_pc2$xend[1], xmax = df_with_orthogonal_pts_pc2$xend[1], ymin = df_with_orthogonal_pts_pc2$yend[1], ymax = df_with_orthogonal_pts_pc2$yend[1]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "green", fontsize = 20)), xmin = df_with_orthogonal_pts_pc2$xend[2], xmax = df_with_orthogonal_pts_pc2$xend[2], ymin = df_with_orthogonal_pts_pc2$yend[2], ymax = df_with_orthogonal_pts_pc2$yend[2]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "green", fontsize = 20)), xmin = df_with_orthogonal_pts_pc2$xend[3], xmax = df_with_orthogonal_pts_pc2$xend[3], ymin = df_with_orthogonal_pts_pc2$yend[3], ymax = df_with_orthogonal_pts_pc2$yend[3]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "green", fontsize = 20)), xmin = df_with_orthogonal_pts_pc2$xend[4], xmax = df_with_orthogonal_pts_pc2$xend[4], ymin = df_with_orthogonal_pts_pc2$yend[4], ymax = df_with_orthogonal_pts_pc2$yend[4]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "green", fontsize = 20)), xmin = df_with_orthogonal_pts_pc2$xend[5], xmax = df_with_orthogonal_pts_pc2$xend[5], ymin = df_with_orthogonal_pts_pc2$yend[5], ymax = df_with_orthogonal_pts_pc2$yend[5]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "green", fontsize = 20)), xmin = df_with_orthogonal_pts_pc2$xend[6], xmax = df_with_orthogonal_pts_pc2$xend[6], ymin = df_with_orthogonal_pts_pc2$yend[6], ymax = df_with_orthogonal_pts_pc2$yend[6]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "green", fontsize = 20)), xmin = df_with_orthogonal_pts_pc2$xend[7], xmax = df_with_orthogonal_pts_pc2$xend[7], ymin = df_with_orthogonal_pts_pc2$yend[7], ymax = df_with_orthogonal_pts_pc2$yend[7]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "green", fontsize = 20)), xmin = df_with_orthogonal_pts_pc2$xend[8], xmax = df_with_orthogonal_pts_pc2$xend[8], ymin = df_with_orthogonal_pts_pc2$yend[8], ymax = df_with_orthogonal_pts_pc2$yend[8]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "green", fontsize = 20)), xmin = df_with_orthogonal_pts_pc2$xend[9], xmax = df_with_orthogonal_pts_pc2$xend[9], ymin = df_with_orthogonal_pts_pc2$yend[9], ymax = df_with_orthogonal_pts_pc2$yend[9]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "green", fontsize = 20)), xmin = df_with_orthogonal_pts_pc2$xend[10], xmax = df_with_orthogonal_pts_pc2$xend[10], ymin = df_with_orthogonal_pts_pc2$yend[10], ymax = df_with_orthogonal_pts_pc2$yend[10]) +
+  coord_equal()
+```
+To plot the final PCA plot, we rotate so that PC1 is horizontal and then we use the projected points to find the positions of the data points. This is how PCA is performed using Singular Value Decomposition (SVD).
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+g1 <- ggplot(df, aes(x = x, y = y)) +
+  theme_void() +
+  geom_segment(aes(x = mean(df$x), xend = mean(df$x), y = -.63, yend = 1), color = "white", size = 1) +
+  geom_segment(aes(x = -2.1, xend = 1.1, y = mean(df$y), yend = mean(df$y)), color = "white", size = 1) +
+  
+    geom_abline(aes(slope = slope, intercept = 0), size = 1, color = "blue") +
+  annotation_custom(textGrob("X", gp = gpar(col = "blue", fontsize = 20)), xmin = df_with_orthogonal_pts$xend[1], xmax = df_with_orthogonal_pts$xend[1], ymin = df_with_orthogonal_pts$yend[1], ymax = df_with_orthogonal_pts$yend[1]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "blue", fontsize = 20)), xmin = df_with_orthogonal_pts$xend[2], xmax = df_with_orthogonal_pts$xend[2], ymin = df_with_orthogonal_pts$yend[2], ymax = df_with_orthogonal_pts$yend[2]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "blue", fontsize = 20)), xmin = df_with_orthogonal_pts$xend[3], xmax = df_with_orthogonal_pts$xend[3], ymin = df_with_orthogonal_pts$yend[3], ymax = df_with_orthogonal_pts$yend[3]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "blue", fontsize = 20)), xmin = df_with_orthogonal_pts$xend[4], xmax = df_with_orthogonal_pts$xend[4], ymin = df_with_orthogonal_pts$yend[4], ymax = df_with_orthogonal_pts$yend[4]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "blue", fontsize = 20)), xmin = df_with_orthogonal_pts$xend[5], xmax = df_with_orthogonal_pts$xend[5], ymin = df_with_orthogonal_pts$yend[5], ymax = df_with_orthogonal_pts$yend[5]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "blue", fontsize = 20)), xmin = df_with_orthogonal_pts$xend[6], xmax = df_with_orthogonal_pts$xend[6], ymin = df_with_orthogonal_pts$yend[6], ymax = df_with_orthogonal_pts$yend[6]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "blue", fontsize = 20)), xmin = df_with_orthogonal_pts$xend[7], xmax = df_with_orthogonal_pts$xend[7], ymin = df_with_orthogonal_pts$yend[7], ymax = df_with_orthogonal_pts$yend[7]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "blue", fontsize = 20)), xmin = df_with_orthogonal_pts$xend[8], xmax = df_with_orthogonal_pts$xend[8], ymin = df_with_orthogonal_pts$yend[8], ymax = df_with_orthogonal_pts$yend[8]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "blue", fontsize = 20)), xmin = df_with_orthogonal_pts$xend[9], xmax = df_with_orthogonal_pts$xend[9], ymin = df_with_orthogonal_pts$yend[9], ymax = df_with_orthogonal_pts$yend[9]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "blue", fontsize = 20)), xmin = df_with_orthogonal_pts$xend[10], xmax = df_with_orthogonal_pts$xend[10], ymin = df_with_orthogonal_pts$yend[10], ymax = df_with_orthogonal_pts$yend[10]) +
+  
+  geom_abline(aes(slope = slope_pc2, intercept = 0), size = 1, color = "green") +
+  annotation_custom(textGrob("X", gp = gpar(col = "green", fontsize = 20)), xmin = df_with_orthogonal_pts_pc2$xend[1], xmax = df_with_orthogonal_pts_pc2$xend[1], ymin = df_with_orthogonal_pts_pc2$yend[1], ymax = df_with_orthogonal_pts_pc2$yend[1]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "green", fontsize = 20)), xmin = df_with_orthogonal_pts_pc2$xend[2], xmax = df_with_orthogonal_pts_pc2$xend[2], ymin = df_with_orthogonal_pts_pc2$yend[2], ymax = df_with_orthogonal_pts_pc2$yend[2]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "green", fontsize = 20)), xmin = df_with_orthogonal_pts_pc2$xend[3], xmax = df_with_orthogonal_pts_pc2$xend[3], ymin = df_with_orthogonal_pts_pc2$yend[3], ymax = df_with_orthogonal_pts_pc2$yend[3]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "green", fontsize = 20)), xmin = df_with_orthogonal_pts_pc2$xend[4], xmax = df_with_orthogonal_pts_pc2$xend[4], ymin = df_with_orthogonal_pts_pc2$yend[4], ymax = df_with_orthogonal_pts_pc2$yend[4]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "green", fontsize = 20)), xmin = df_with_orthogonal_pts_pc2$xend[5], xmax = df_with_orthogonal_pts_pc2$xend[5], ymin = df_with_orthogonal_pts_pc2$yend[5], ymax = df_with_orthogonal_pts_pc2$yend[5]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "green", fontsize = 20)), xmin = df_with_orthogonal_pts_pc2$xend[6], xmax = df_with_orthogonal_pts_pc2$xend[6], ymin = df_with_orthogonal_pts_pc2$yend[6], ymax = df_with_orthogonal_pts_pc2$yend[6]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "green", fontsize = 20)), xmin = df_with_orthogonal_pts_pc2$xend[7], xmax = df_with_orthogonal_pts_pc2$xend[7], ymin = df_with_orthogonal_pts_pc2$yend[7], ymax = df_with_orthogonal_pts_pc2$yend[7]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "green", fontsize = 20)), xmin = df_with_orthogonal_pts_pc2$xend[8], xmax = df_with_orthogonal_pts_pc2$xend[8], ymin = df_with_orthogonal_pts_pc2$yend[8], ymax = df_with_orthogonal_pts_pc2$yend[8]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "green", fontsize = 20)), xmin = df_with_orthogonal_pts_pc2$xend[9], xmax = df_with_orthogonal_pts_pc2$xend[9], ymin = df_with_orthogonal_pts_pc2$yend[9], ymax = df_with_orthogonal_pts_pc2$yend[9]) +
+    annotation_custom(textGrob("X", gp = gpar(col = "green", fontsize = 20)), xmin = df_with_orthogonal_pts_pc2$xend[10], xmax = df_with_orthogonal_pts_pc2$xend[10], ymin = df_with_orthogonal_pts_pc2$yend[10], ymax = df_with_orthogonal_pts_pc2$yend[10]) +
+  
+  geom_point(size = 4) +
+  
+  coord_equal()
+g1
+# print(g1, vp = viewport(width = unit(0.5, "npc"), height = unit(0.5, "npc"), angle = 162))
+```
+
+Lastly, we can convert the eigenvalues of PC1 and PC2 into variation around the origin by dividing by the sample size minus 1. Using the `summary`method in R, PCA tells us that our PC1 accounts for 82% of variation.
+
+```{r, warning=FALSE, message=FALSE}
+pca <- princomp(df)
+# loadings(pca)
+summary(pca)
+```
+

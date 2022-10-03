@@ -278,6 +278,9 @@ $(document).ready(function () {
         </li>
       </ul>
     </li>
+    <li>
+      <a href="pca.html">PCA</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -340,12 +343,13 @@ cutoff  &lt;- quantile(df$weight, .05)
 
 pnorm(cutoff, mean = m , sd = std) # Check area under the curve that&#39;s below the cutoff (pnorm() returns area under the curve)</code></pre>
 <pre><code>##         5% 
-## 0.05013971</code></pre>
-<pre class="r"><code>g1 &lt;- ggplot(df, aes(x = weight)) +
+## 0.04969473</code></pre>
+<pre class="r"><code>ggplot(df, aes(x = weight)) +
   geom_density() +
   stat_function(fun = dnorm, args = list(mean = m, sd = std), xlim = c(min(df$weight), cutoff), geom = &quot;area&quot;) +
   theme_classic() +
   annotate(&quot;text&quot;, x = cutoff, y = -.01, label = as.character(round(cutoff)), size = 3.5, fontface = &quot;bold&quot;) </code></pre>
+<p><img src="probvslike_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
 <p><br></p>
 <p>The <strong>likelihood</strong> of a distribution with mean = 30 and
 standard deviation = 1 given an observation = 28 is the y-axis value of

@@ -11,7 +11,7 @@
 
 
 
-<title>How to Find Maximum Likelihood Estimators for Mean &amp; Standard Deviation</title>
+<title>PCA</title>
 
 <script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -319,109 +319,71 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">How to Find Maximum Likelihood Estimators
-for Mean &amp; Standard Deviation</h1>
+<h1 class="title toc-ignore">PCA</h1>
 
 </div>
 
 
-<style> body {text-align: justify} </style>
-<p>Now that we know what a <strong>likelihood</strong> is we turn our
-focus to Maximum Likelihood Estimator (MLE) which simply maximizes the
-likelihood function.</p>
-<p>We will use the likelihood of a normal distribution to find the
-optimal values for mean <span class="math inline">\(\mu\)</span> and
-standard deviation <span class="math inline">\(\sigma\)</span> given an
-observation <code>x</code>, i.e., <span class="math inline">\(L(\mu,
-\sigma~|~x)\)</span>.</p>
-<p>Let’s start with MLE for <span class="math inline">\(\mu\)</span>. If
-we fix <span class="math inline">\(\sigma\)</span> as given and plug in
-many <span class="math inline">\(\mu\)</span> to our normal likelihood
-function, we get multiple <span class="math inline">\(\mu\)</span>
-values i.e., <span class="math display">\[L(\mu&#39;s~|~\sigma,
-x)\]</span> Then we check which <span class="math inline">\(\mu\)</span>
-gives the maximum likelihood. Note that <strong>the peak is when the
-slope of the curve is 0</strong>.</p>
-<p>We do the same for <span class="math inline">\(\sigma\)</span> this
-time by fixing <span class="math inline">\(\mu\)</span>: <span
-class="math display">\[L(\sigma&#39;s~|~\mu, x)\]</span></p>
-<p>Now that we know the likelihood functions for both of the normal
-parameters <span class="math inline">\(\mu\)</span> and <span
-class="math inline">\(\sigma\)</span> for a single observation, we
-expand this logic to <code>n</code> observations. Because each sample is
-independent, the likelihood function for n samples is:</p>
-<span class="math display">\[\begin{aligned}
-
-L(\mu, \sigma~|~x_1, x_2, ..., x_n) &amp;=L(\mu, \sigma~|~x_1)...L(\mu,
-\sigma~|~x_n) \\
-&amp;=\frac{1}{\sqrt{2\pi\sigma^2}}e^{\frac{(x_1-\mu)^2}{2\sigma^2}}
-...\frac{1}{\sqrt{2\pi\sigma^2}}e^{\frac{(x_n-\mu)^2}{2\sigma^2}}
-
-\end{aligned}\]</span>
-<p>MLE for <span class="math inline">\(\mu\)</span> is finding the
-derivative of L with respect to <span class="math inline">\(\mu\)</span>
-and solving it for <span class="math inline">\(\mu\)</span>. One trick
-we can use is to take the derivative of log L instead of L as it makes
-the calculation much easier. Note that the peaks for <span
-class="math inline">\(\mu\)</span> and <span
-class="math inline">\(\sigma\)</span> of both functions are
-identical.</p>
-<span class="math display">\[\begin{aligned}
-
-ln[L(\mu, \sigma~|~x_1, x_2, \dots, x_n)] &amp;= ln[L(\mu,
-\sigma~|~x_1)]+ \dots +ln[L(\mu, \sigma~|~x_n)] \\
-
-&amp;=
-ln(\frac{1}{\sqrt{2\pi\sigma^2}}e^{\frac{(x_1-\mu)^2}{2\sigma^2}})
-+ \dots +
-ln(\frac{1}{\sqrt{2\pi\sigma^2}}e^{\frac{(x_n-\mu)^2}{2\sigma^2}})\\
-
-&amp;= (-\frac{1}{2}ln(2\pi\sigma^2)-\frac{(x_1-\mu)^2}{2\sigma^2}) +
-\dots +
-(-\frac{1}{2}ln(2\pi\sigma^2)-\frac{(x_n-\mu)^2}{2\sigma^2})\\
-
-&amp;=
--\frac{1}{2}ln(2\pi)-\frac{1}{2}ln\sigma^2-\frac{(x_1-\mu)^2}{2\sigma^2}
-- \dots-
-\frac{1}{2}ln(2\pi)-\frac{1}{2}ln\sigma^2-\frac{(x_n-\mu)^2}{2\sigma^2}\\
-
-&amp;=
--\frac{n}{2}ln(2\pi)-nln\sigma-\frac{1}{2\sigma^2}\sum_{i=1}^{n}(x_i-\mu)^2
-
-\end{aligned}\]</span>
-<p>Hence, the derivative we will take with respect to <span
-class="math inline">\(\mu\)</span> is:</p>
-<p><span
-class="math display">\[-\frac{n}{2}ln(2\pi)-nln\sigma-\frac{1}{2\sigma^2}\sum_{i=1}^{1}(x_i-\mu)^2~i.e.,
-\]</span></p>
-<span class="math display">\[\begin{aligned}
-
-&amp;\frac{\partial}{\partial \mu} ln[L(\mu, \sigma~|~x_1, x_2, \dots ,
-x_n)] \\
-
-=&amp; \frac{1}{\sigma^2}(\sum_{i=1}^{n}x_i-n\mu) = 0 \\
-
-&amp;=&gt;~ \mu=\frac{1}{n}\sum_{i=1}^{n}x_i
-
-\end{aligned}\]</span>
-<p>Thus, MLE for <span class="math inline">\(\mu\)</span> equals the
-mean of the data which is the center of normal distribution.</p>
-<p>Next, we take the derivative with respect to <span
-class="math inline">\(\sigma\)</span>~:</p>
-<span class="math display">\[\begin{aligned}
-
-&amp;\frac{\partial}{\partial \sigma} ln[L(\mu, \sigma~|~x_1, x_2, \dots
-, x_n)] \\
-
-&amp;= -\frac{n}{\sigma}+\frac{1}{\sigma^3}\sum_{i=1}^{n}(x_i-\mu)^2 = 0
-\\
-
-&amp;=&gt;~ \sigma = \sqrt{\frac{1}{n}\sum_{i=1}^{n}(x_i-\mu)^2}
-
-\end{aligned}\]</span>
-<p>Thus, MLE for <span class="math inline">\(\sigma\)</span> equals the
-standard deviation of the data which is the widness of normal
-distribution.</p>
+<p>Principal Component Analysis (PCA) is one of the famous
+dimensionality reduction methods. When your model has too many
+variables, PCA helps narrowing them down to two that best explains the
+model. Let’s walk through the process one-by-one with a model that has
+two variables.</p>
+<p>PCA starts by computing the average (red X in plot 1) of each
+variable. Then we can plot the center of the data by using these
+averages:</p>
+<p><img src="pca_files/figure-html/unnamed-chunk-1-7.png" width="672" /></p>
+<p>Next, we shift the data such that the center (marked as red) is at
+the origin. Note that the relative positions have not changed.</p>
+<p><img src="pca_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>We now find the best line that fits the samples given that the line
+passes the origin.</p>
+<p><img src="pca_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>To tell how good the fit is PCA projects the samples onto the line
+and then either find the line that minimizes the distances from the
+samples to the line <strong>or</strong> maximizes the distances from the
+projected points to the origin. Although intuitively it makes sense to
+go with the former, PCA prefers the latter as the computation is easier.
+We quantify the distances by adding up the squared distances between the
+projected points to the origin i.e., <strong>sum of squared
+distances</strong>. The line with the largest <strong>sum of squared
+distances</strong> is called a <strong>Principal Component</strong>
+(PC). We call the sum of squared distances for PC1 the
+<strong>Eigenvalue</strong> and the square root the <strong>Singular
+Value</strong></p>
+<p><img src="pca_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>Note the slope is about .30. This means for every 10 units we go
+along the x axis we go up 3 units along the y axis. So most of our data
+is spread out along the x axis, hence our x variable is more important
+when it comes to explaining how the data are spread out. We call this a
+linear combination of x and y.</p>
+<p>Instead of using the original slope, we change the x and y values by
+making a unit vector (divide by the slope) so that the length of the
+slope becomes 1. We call this unit vector the
+<strong>Eigenvector</strong> or <strong>Singular Vector</strong> of
+<strong>PC1</strong> and call the proportions of x and y <strong>Loading
+Scores</strong>.</p>
+<p>To get PC2, we simply draw a line perpendicular to PC1. Then like we
+did for PC1, we scale to get a unit vector which becomes the Eigenvector
+for PC2.</p>
+<p><img src="pca_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+To plot the final PCA plot, we rotate so that PC1 is horizontal and then
+we use the projected points to find the positions of the data points.
+This is how PCA is performed using Singular Value Decomposition
+(SVD).</p>
+<p><img src="pca_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>Lastly, we can convert the eigenvalues of PC1 and PC2 into variation
+around the origin by dividing by the sample size minus 1. Using the
+<code>summary</code>method in R, PCA tells us that our PC1 accounts for
+82% of variation.</p>
+<pre class="r"><code>pca &lt;- princomp(df)
+# loadings(pca)
+summary(pca)</code></pre>
+<pre><code>## Importance of components:
+##                           Comp.1    Comp.2
+## Standard deviation     0.8682098 0.4008325
+## Proportion of Variance 0.8243033 0.1756967
+## Cumulative Proportion  0.8243033 1.0000000</code></pre>
 
 
 
