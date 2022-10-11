@@ -2,11 +2,19 @@
 title: "How to use tidyr::pivot_wider"
 ---
 
+rmarkdown::render_site()
+
+```{css, echo = FALSE}
+body {
+  font-family: arial;
+  font-size: 13pt;
+  color: black;
+}
+```
+
 <style> body {text-align: justify} </style>
 
 <br>
-
-rmarkdown::render_site()
  
 ## Goal: Convert data format from long to wide
 

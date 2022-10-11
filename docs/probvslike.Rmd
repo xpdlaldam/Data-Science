@@ -3,9 +3,18 @@ title: "Probability vs Likelihood"
 output: html_document
 ---
 
+```{css, echo = FALSE}
+body {
+  font-family: arial;
+  font-size: 13pt;
+  color: black;
+}
+```
+
 ```{=html}
 <style> body {text-align: justify} </style>
 ```
+
 Before explaining the difference between a probability and a likelihood, let's first check visually. Let's say we have data from a normal distribution with mean = 30 and standard deviation = 1. The **probability** of getting less than the observed value 28 given the distribution is $P(X<=28~|~N(30, 1))$ which is the area under the curve below 28 as shown in the graph.
 
 ```{r, warning=FALSE, message=FALSE}
@@ -45,7 +54,6 @@ ggplot(df, aes(x = weight)) +
   geom_segment(aes(x = 24.5, xend = cutoff, y = .1, yend = .1), color = "black", size = 2) +
   geom_segment(aes(x = cutoff, xend = cutoff, y = 0, yend = .1), color = "black", size = 2) +
   annotation_custom(textGrob("X", gp = gpar(col = "red", fontsize = 25)), xmin = cutoff, xmax = cutoff, ymin = density_value, ymax = density_value) 
-
 ```
 
 Simply put, a probability is area under the curve in a fixed distribution and mathematically we say:

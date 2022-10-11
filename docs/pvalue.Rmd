@@ -3,6 +3,14 @@ title: "P-value"
 output: html_document
 ---
 
+```{css, echo = FALSE}
+body {
+  font-family: arial;
+  font-size: 13pt;
+  color: black;
+}
+```
+
 <style> body {text-align: justify} </style>
 
 We use p-values a lot in our daily lives. However, if someone asks you what it really means you will probably have a hard time explaining. We will go through what exactly a p-value is with a concrete example one by one.
@@ -37,8 +45,6 @@ ggplot(df, aes(x = weight)) +
   annotate("text", x = cutoff1, y = -.01, label = as.character(round(cutoff1)), size = 3.5, fontface = "bold") +
   annotate("text", x = cutoff2, y = -.01, label = as.character(round(cutoff2)), size = 3.5, fontface = "bold") +
   coord_cartesian(ylim = c(0, .08), clip = "off") 
-
-
 ```
 
 To compute p-values for a continuous outcome, you need to sum the percentages of area under the curve. Since 142 lbs is 0.05 quantile, the left shaded region's area under the curve accounts for 5%. We add this area that is smaller or less than 142 which is the first half of the "equal or rarer" part. Now we look at the other "equal or rarer". Since .95 quantile of our weight distribution is at 158 lbs, we add the right shaded area that is greater or equal than 158. Thus, the p-value for someone weighing 142 lbs is .05 + .05 = 0.1.

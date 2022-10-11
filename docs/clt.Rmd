@@ -3,6 +3,16 @@ title: "Central Limit Theorem"
 output: html_document
 ---
 
+```{css, echo = FALSE}
+body {
+  font-family: arial;
+  font-size: 13pt;
+  color: black;
+}
+```
+
+<style> body {text-align: justify} </style>
+
 Central Limit Theorem (CLT) is one of the most powerful yet simple concept in statistics. Let's state it formally: 
 
 ```{=tex}

@@ -3,6 +3,14 @@ title: "How and when to use Regularized Linear Models"
 output: html_document
 ---
 
+```{css, echo = FALSE}
+body {
+  font-family: arial;
+  font-size: 13pt;
+  color: black;
+}
+```
+
 <style> body {text-align: justify} </style>
 
 <br>

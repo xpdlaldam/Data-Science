@@ -3,6 +3,16 @@ title: "Classification Trees"
 output: html_document
 ---
 
+```{css, echo = FALSE}
+body {
+  font-family: arial;
+  font-size: 13pt;
+  color: black;
+}
+```
+
+<style> body {text-align: justify} </style>
+
 Now we know what Classification Trees are let's see how to train and make predictions. We will use the wine dataset from `sklearn`
 ```{python}
 import pandas as pd

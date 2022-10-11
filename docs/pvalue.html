@@ -324,6 +324,13 @@ $(document).ready(function () {
 </div>
 
 
+<style type="text/css">
+body {
+  font-family: arial;
+  font-size: 13pt;
+  color: black;
+}
+</style>
 <style> body {text-align: justify} </style>
 <p>We use p-values a lot in our daily lives. However, if someone asks
 you what it really means you will probably have a hard time explaining.
@@ -362,7 +369,7 @@ ggplot(df, aes(x = weight)) +
   annotate(&quot;text&quot;, x = cutoff1, y = -.01, label = as.character(round(cutoff1)), size = 3.5, fontface = &quot;bold&quot;) +
   annotate(&quot;text&quot;, x = cutoff2, y = -.01, label = as.character(round(cutoff2)), size = 3.5, fontface = &quot;bold&quot;) +
   coord_cartesian(ylim = c(0, .08), clip = &quot;off&quot;) </code></pre>
-<p><img src="pvalue_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p><img src="pvalue_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <p>To compute p-values for a continuous outcome, you need to sum the
 percentages of area under the curve. Since 142 lbs is 0.05 quantile, the
 left shaded region’s area under the curve accounts for 5%. We add this

@@ -3,6 +3,16 @@ title: "Decision Trees Concept"
 output: html_document
 ---
 
+```{css, echo = FALSE}
+body {
+  font-family: arial;
+  font-size: 13pt;
+  color: black;
+}
+```
+
+<style> body {text-align: justify} </style>
+
 Decision Trees have become a popular algorithm for modern machine learning models. There are two types of a Decision Tree: A **Classification Tree** where the statements are classified into text categories and a **Regression Tree** where statements are numbers. This is an example of a Classification Tree:
 
 ```{r message=FALSE, warning=FALSE, results='asis', tidy=F}

@@ -324,6 +324,13 @@ $(document).ready(function () {
 </div>
 
 
+<style type="text/css">
+body {
+  font-family: arial;
+  font-size: 13pt;
+  color: black;
+}
+</style>
 <style> body {text-align: justify} </style>
 <p>Before explaining the difference between a probability and a
 likelihood, let’s first check visually. Let’s say we have data from a
@@ -349,7 +356,7 @@ pnorm(cutoff, mean = m , sd = std) # Check area under the curve that&#39;s below
   stat_function(fun = dnorm, args = list(mean = m, sd = std), xlim = c(min(df$weight), cutoff), geom = &quot;area&quot;) +
   theme_classic() +
   annotate(&quot;text&quot;, x = cutoff, y = -.01, label = as.character(round(cutoff)), size = 3.5, fontface = &quot;bold&quot;) </code></pre>
-<p><img src="probvslike_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p><img src="probvslike_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <p><br></p>
 <p>The <strong>likelihood</strong> of a distribution with mean = 30 and
 standard deviation = 1 given an observation = 28 is the y-axis value of
@@ -366,7 +373,7 @@ ggplot(df, aes(x = weight)) +
   geom_segment(aes(x = 24.5, xend = cutoff, y = .1, yend = .1), color = &quot;black&quot;, size = 2) +
   geom_segment(aes(x = cutoff, xend = cutoff, y = 0, yend = .1), color = &quot;black&quot;, size = 2) +
   annotation_custom(textGrob(&quot;X&quot;, gp = gpar(col = &quot;red&quot;, fontsize = 25)), xmin = cutoff, xmax = cutoff, ymin = density_value, ymax = density_value) </code></pre>
-<p><img src="probvslike_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="probvslike_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>Simply put, a probability is area under the curve in a fixed
 distribution and mathematically we say:</p>
 <p><span class="math display">\[P(Data|Distribution)\]</span></p>

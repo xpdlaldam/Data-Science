@@ -3,6 +3,14 @@ title: "How to Find Maximum Likelihood Estimators for Mean & Standard Deviation"
 output: html_document
 ---
 
+```{css, echo = FALSE}
+body {
+  font-family: arial;
+  font-size: 13pt;
+  color: black;
+}
+```
+
 ```{=html}
 <style> body {text-align: justify} </style>
 ```

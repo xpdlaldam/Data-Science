@@ -3,6 +3,16 @@ title: "PCA"
 output: html_document
 ---
 
+```{css, echo = FALSE}
+body {
+  font-family: arial;
+  font-size: 13pt;
+  color: black;
+}
+```
+
+<style> body {text-align: justify} </style>
+
 Principal Component Analysis (PCA) is one of the famous dimensionality reduction methods. When your model has too many variables, PCA helps narrowing them down to two that best explains the model. Let's walk through the process one-by-one with a model that has two variables.
 
 PCA starts by computing the average (red X in plot 1) of each variable. Then we can plot the center of the data by using these averages:
@@ -17,14 +27,17 @@ data[,1] <- data[,1] - mean(data[,1])
 data[,2] <- data[,2] - mean(data[,2])
 df <- data.frame(x = data[,1], y = data[,2])
 
+mean_x <- mean(df$x)
+mean_y <- mean(df$y)
+
 ggplot(df, aes(x = x, y = y)) +
   theme_classic() +
   geom_point() +
-  annotation_custom(textGrob("X", gp = gpar(col = "blue", fontsize = 20)), xmin = mean(df$x), xmax = mean(df$x), ymin = -.63, ymax = -.63) +
-  annotation_custom(textGrob("X", gp = gpar(col = "blue", fontsize = 20)), xmin = -2.1, xmax = -2.1, ymin = mean(df$y), ymax = mean(df$y)) +
-  annotation_custom(textGrob("X", gp = gpar(col = "red", fontsize = 20)), xmin = mean(df$x), xmax = mean(df$x), ymin = mean(df$y), ymax = mean(df$y)) +
-  geom_segment(aes(x = mean(df$x), xend = mean(df$x), y = -.63, yend = mean(df$y)), color = "black", size = 1) +
-  geom_segment(aes(x = -2.1, xend = mean(df$x), y = mean(df$y), yend = mean(df$y)), color = "black", size = 1)
+  annotation_custom(textGrob("X", gp = gpar(col = "blue", fontsize = 20)), xmin = mean_x, xmax = mean_x, ymin = -.63, ymax = -.63) +
+  annotation_custom(textGrob("X", gp = gpar(col = "blue", fontsize = 20)), xmin = -2.1, xmax = -2.1, ymin = mean_y, ymax = mean_y) +
+  annotation_custom(textGrob("X", gp = gpar(col = "red", fontsize = 20)), xmin = mean_x, xmax = mean_x, ymin = mean_y, ymax = mean_y) +
+  geom_segment(aes(x = mean_x, xend = mean_x, y = -.63, yend = mean_y), color = "black", size = 1) +
+  geom_segment(aes(x = -2.1, xend = mean_x, y = mean_y, yend = mean_y), color = "black", size = 1)
 ```
 
 Next, we shift the data such that the center (marked as red) is at the origin. Note that the relative positions have not changed.
@@ -33,12 +46,12 @@ Next, we shift the data such that the center (marked as red) is at the origin. N
 ggplot(df, aes(x = x, y = y)) +
   theme_void() +
   geom_point(size = 5) +
-  annotation_custom(textGrob("X", gp = gpar(col = "red", fontsize = 20)), xmin = mean(df$x), xmax = mean(df$x), ymin = mean(df$y), ymax = mean(df$y)) +
-  geom_segment(aes(x = mean(df$x), xend = mean(df$x), y = -.63, yend = 1), color = "black", size = 1) +
-  geom_segment(aes(x = -2.1, xend = 1.1, y = mean(df$y), yend = mean(df$y)), color = "black", size = 1)
+  annotation_custom(textGrob("X", gp = gpar(col = "red", fontsize = 20)), xmin = mean_x, xmax = mean_x, ymin = mean_y, ymax = mean_y) +
+  geom_segment(aes(x = mean_x, xend = mean_x, y = -.63, yend = 1), color = "black", size = 1) +
+  geom_segment(aes(x = -2.1, xend = 1.1, y = mean_y, yend = mean_y), color = "black", size = 1)
 ```
 
-We now find the best line that fits the samples given that the line passes the origin. 
+We now find the best line that fits the samples given that the line passes the origin.
 
 ```{r, warning=FALSE, message=FALSE, echo=FALSE}
 pc1 <- prcomp(df)$rotation 
@@ -47,9 +60,9 @@ slope <- pc1[2,1] / pc1[1,1]
 ggplot(df, aes(x = x, y = y)) +
   theme_void() +
   geom_point(size = 5) +
-  annotation_custom(textGrob("X", gp = gpar(col = "red", fontsize = 20)), xmin = mean(df$x), xmax = mean(df$x), ymin = mean(df$y), ymax = mean(df$y)) +
-  geom_segment(aes(x = mean(df$x), xend = mean(df$x), y = -.63, yend = 1), color = "black", size = 1) +
-  geom_segment(aes(x = -2.1, xend = 1.1, y = mean(df$y), yend = mean(df$y)), color = "black", size = 1) +
+  annotation_custom(textGrob("X", gp = gpar(col = "red", fontsize = 20)), xmin = mean_x, xmax = mean_x, ymin = mean_y, ymax = mean_y) +
+  geom_segment(aes(x = mean_x, xend = mean_x, y = -.63, yend = 1), color = "black", size = 1) +
+  geom_segment(aes(x = -2.1, xend = 1.1, y = mean_y, yend = mean_y), color = "black", size = 1) +
   geom_abline(aes(slope = slope, intercept = 0), size = 1, color = "red") +
   coord_equal()
 ```
@@ -77,9 +90,9 @@ df_with_orthogonal_pts <- data.frame(x = df[,1], y = df[,2], xend = orthogonal_p
 ggplot(df, aes(x = x, y = y)) +
   theme_void() +
   geom_point(size = 5) +
-  annotation_custom(textGrob("X", gp = gpar(col = "red", fontsize = 20)), xmin = mean(df$x), xmax = mean(df$x), ymin = mean(df$y), ymax = mean(df$y)) +
-  geom_segment(aes(x = mean(df$x), xend = mean(df$x), y = -.63, yend = 1), color = "black", size = 1) +
-  geom_segment(aes(x = -2.1, xend = 1.1, y = mean(df$y), yend = mean(df$y)), color = "black", size = 1) +
+  annotation_custom(textGrob("X", gp = gpar(col = "red", fontsize = 20)), xmin = mean_x, xmax = mean_x, ymin = mean_y, ymax = mean_y) +
+  geom_segment(aes(x = mean_x, xend = mean_x, y = -.63, yend = 1), color = "black", size = 1) +
+  geom_segment(aes(x = -2.1, xend = 1.1, y = mean_y, yend = mean_y), color = "black", size = 1) +
   geom_abline(aes(slope = slope, intercept = 0), size = 1, color = "blue") +
   geom_segment(data = df_with_orthogonal_pts, aes(x = x, y = y, xend = xend, yend = yend)) +
     annotation_custom(textGrob("X", gp = gpar(col = "blue", fontsize = 20)), xmin = df_with_orthogonal_pts$xend[1], xmax = df_with_orthogonal_pts$xend[1], ymin = df_with_orthogonal_pts$yend[1], ymax = df_with_orthogonal_pts$yend[1]) +
@@ -98,7 +111,7 @@ Note the slope is about .30. This means for every 10 units we go along the x axi
 
 Instead of using the original slope, we change the x and y values by making a unit vector (divide by the slope) so that the length of the slope becomes 1. We call this unit vector the **Eigenvector** or **Singular Vector** of **PC1** and call the proportions of x and y **Loading Scores**.
 
-To get PC2, we simply draw a line perpendicular to PC1. Then like we did for PC1, we scale to get a unit vector which becomes the Eigenvector for PC2. 
+To get PC2, we simply draw a line perpendicular to PC1. Then like we did for PC1, we scale to get a unit vector which becomes the Eigenvector for PC2.
 
 ```{r, warning=FALSE, message=FALSE, echo=FALSE}
 slope_pc2 <- -1/slope
@@ -122,9 +135,9 @@ df_with_orthogonal_pts_pc2 <- data.frame(x = df[,1], y = df[,2], xend = orthogon
 ggplot(df, aes(x = x, y = y)) +
   theme_void() +
   geom_point(size = 5) +
-  annotation_custom(textGrob("X", gp = gpar(col = "red", fontsize = 20)), xmin = mean(df$x), xmax = mean(df$x), ymin = mean(df$y), ymax = mean(df$y)) +
-  geom_segment(aes(x = mean(df$x), xend = mean(df$x), y = -.63, yend = 1), color = "black", size = 1) +
-  geom_segment(aes(x = -2.1, xend = 1.1, y = mean(df$y), yend = mean(df$y)), color = "black", size = 1) +
+  annotation_custom(textGrob("X", gp = gpar(col = "red", fontsize = 20)), xmin = mean_x, xmax = mean_x, ymin = mean_y, ymax = mean_y) +
+  geom_segment(aes(x = mean_x, xend = mean_x, y = -.63, yend = 1), color = "black", size = 1) +
+  geom_segment(aes(x = -2.1, xend = 1.1, y = mean_y, yend = mean_y), color = "black", size = 1) +
   geom_abline(aes(slope = slope, intercept = 0), size = 1, color = "red") +
   geom_abline(aes(slope = slope_pc2, intercept = 0), size = 1, color = "green") +
     geom_segment(data = df_with_orthogonal_pts_pc2, aes(x = x, y = y, xend = xend, yend = yend)) +
@@ -140,13 +153,14 @@ ggplot(df, aes(x = x, y = y)) +
     annotation_custom(textGrob("X", gp = gpar(col = "green", fontsize = 20)), xmin = df_with_orthogonal_pts_pc2$xend[10], xmax = df_with_orthogonal_pts_pc2$xend[10], ymin = df_with_orthogonal_pts_pc2$yend[10], ymax = df_with_orthogonal_pts_pc2$yend[10]) +
   coord_equal()
 ```
+
 To plot the final PCA plot, we rotate so that PC1 is horizontal and then we use the projected points to find the positions of the data points. This is how PCA is performed using Singular Value Decomposition (SVD).
 
 ```{r, warning=FALSE, message=FALSE, echo=FALSE}
 g1 <- ggplot(df, aes(x = x, y = y)) +
   theme_void() +
-  geom_segment(aes(x = mean(df$x), xend = mean(df$x), y = -.63, yend = 1), color = "white", size = 1) +
-  geom_segment(aes(x = -2.1, xend = 1.1, y = mean(df$y), yend = mean(df$y)), color = "white", size = 1) +
+  geom_segment(aes(x = mean_x, xend = mean_x, y = -.63, yend = 1), color = "white", size = 1) +
+  geom_segment(aes(x = -2.1, xend = 1.1, y = mean_y, yend = mean_y), color = "white", size = 1) +
   
     geom_abline(aes(slope = slope, intercept = 0), size = 1, color = "blue") +
   annotation_custom(textGrob("X", gp = gpar(col = "blue", fontsize = 20)), xmin = df_with_orthogonal_pts$xend[1], xmax = df_with_orthogonal_pts$xend[1], ymin = df_with_orthogonal_pts$yend[1], ymax = df_with_orthogonal_pts$yend[1]) +
@@ -185,5 +199,149 @@ Lastly, we can convert the eigenvalues of PC1 and PC2 into variation around the 
 pca <- princomp(df)
 # loadings(pca)
 summary(pca)
+```
+
+
+Now we will learn how to perform PCA in Python.
+```{python, warnings=F}
+## Python 3.9.6
+import pandas as pd
+import numpy as np
+import random as rd
+from sklearn.decomposition import PCA
+from sklearn import preprocessing
+from matplotlib import pyplot as plt
+from sklearn.preprocessing import StandardScaler
+from sklearn import datasets
+from sklearn.datasets import fetch_openml
+from sklearn.model_selection import train_test_split
+np.set_printoptions(suppress=True)
+```
+
+We will make a toy dataset from a poisson distribution with rows being 10 different customers and columns being 5 different types
+```{python}
+customer = ['customer' + str(i) for i in range(1, 11)]
+type = ['type' + str(i) for i in range(1, 6)]
+data = pd.DataFrame(columns = [*type], index=customer)
+data.shape # (10, 5)
+
+np.random.seed(0)
+for row in data.index:
+  data.loc[row, 'type1':'type5'] = np.random.poisson(rd.randrange(10, 1000), 5)
+
+scaler = StandardScaler()
+scaled_data = scaler.fit_transform(data)
+
+# Fit
+pca = PCA() # returns the same shape as the original data i.e. in our case 5 dimensions as we have 5 variables
+# pca = PCA(n_components = 2) # returns 2 principal components
+# pca = PCA(.95) # chooses the minimum number of principal components such that 95% of the variance is retained
+pca.fit(scaled_data) # computes loading scores and variation for each principle component
+pca_data = pca.transform(scaled_data) # generate coordinates to plot PCA graph based on the loading scores and the scaled data
+pca_data.shape # (10, 5) => returns the same shape as the original data if nothing is specified in PCA()
+
+# scree plot *
+var_percentage = np.around(pca.explained_variance_ratio_ * 100, 2)
+labels = ['PC' + str(x) for x in range(1, len(var_percentage) + 1)]
+
+plt.bar(x = range(1, len(var_percentage) + 1), height = var_percentage, tick_label = labels)
+plt.xlabel("PC")
+plt.ylabel("Variance %")
+plt.title("Scree Plot")
+plt.show()
+
+pca_df = pd.DataFrame(pca_data, index=[*customer], columns = labels)
+pca_df.shape # (10, 5)
+
+# PCA Plot
+plt.scatter(pca_df['PC1'], pca_df['PC2'])
+plt.title("PCA Plot")
+plt.xlabel(f'PC1 {var_percentage[0]} %')
+plt.ylabel(f'PC 2 {var_percentage[1]}%')
+for i in pca_df.index:
+  print(i)
+  plt.annotate(i, (pca_df.PC1.loc[i], pca_df.PC2.loc[i]))
+plt.show()
+```
+
+Now We fit PCA using another dataset `iris` from Michael Galarnyk's Medium post. The process is the same as before but we have 3 target labels for this case
+```{python}
+iris = datasets.load_iris()
+iris_df = pd.DataFrame(iris.data)
+iris_df['target'] = iris.target
+
+features = ['sepal_length', 'sepal_width', 'petal_lenth', 'petal_width']
+iris_df.columns = features + ['target']
+
+X = iris_df.loc[:, features].values # values: make iris_df np.array
+y = iris_df.loc[:, 'target'].values
+
+X_scaled = StandardScaler().fit_transform(X)
+
+# Projects and thus reduces 4D into 2D. No special meaning attached for principal components as they are just the two main dimensions of variation
+
+# First fit with all 4 variables
+pca = PCA()
+pca_data = pca.fit_transform(X_scaled)
+pca_data.shape # 4D
+
+# scree plot *
+var_percentage = np.around(pca.explained_variance_ratio_ * 100, 2) # *
+labels = ['PC' + str(x) for x in range(1, len(var_percentage) + 1)]
+
+plt.bar(x = range(1, len(var_percentage) + 1), height = var_percentage, tick_label = labels)
+plt.show()
+plt.title("Scree Plot")
+plt.xlabel("PC")
+plt.ylabel("Variance %")
+plt.show()
+
+# Scree plot tells us that PC1 and PC2 explains most of the variance of our dataset, hence refit with 2 PCs
+pca = PCA(n_components = 2)
+pca_data = pca.fit_transform(X_scaled)
+pca_data.shape[1] # 2D
+
+labels = ['PC' + str(x) for x in range(1, len(var_percentage) + 1)]
+
+pca_df = pd.DataFrame(data = pca_data, columns = ['PC' + str(x) for x in range(1, pca_data.shape[1] + 1)])
+
+pca_df_with_target = pd.concat([pca_df, iris_df['target']], axis = 1)
+
+targets = [0, 1, 2]
+colors = ['r', 'g', 'b']
+
+fig = plt.figure(figsize = (8,8))
+ax = fig.add_subplot(1,1,1)
+ax.set_xlabel('PC 1', fontsize = 15)
+ax.set_ylabel('PC 2', fontsize = 15)
+ax.set_title('PCA Plot', fontsize = 20)
+for target, color in zip(targets, colors):
+  indicesToKeep = pca_df_with_target['target'] == target # grabs three target values individually as the target variable is inside a for loop of targets variable -> then will plot ax.scatter individually, hence the for loop acts as a group by
+  ax.scatter(
+    pca_df_with_target.loc[indicesToKeep, 'PC1'],
+    pca_df_with_target.loc[indicesToKeep, 'PC2'], 
+    c = color, 
+    s = 50
+    )
+ax.legend(targets)
+plt.show()
+```
+
+One can also us PCA to speed up an ML algorithm such as logistic regression after reducing dimensionality using PCA. We started with 784 features from the MNIST dataset that was reduced to 327 principal components which then can be fed for other ML models. 
+
+```{python}
+# mnist = fetch_openml('mnist_784')
+# 
+# X_train, X_test, y_train, y_test = train_test_split(mnist.data, mnist.target, test_size=1/7.0, random_state=0)
+# X_train.shape # 60,000 images with 784 features each
+# 
+# scaler = StandardScaler()
+# X_train_scaled = scaler.fit_transform(X_train)
+# 
+# pca = PCA(.95) # Chooses the minimum number of PCs such that 95% of variance is retained
+# 
+# pca_data = pca.fit_transform(X_train_scaled)
+# pca.n_components_ # 327 PCs chosen
+# pca_data.shape # (60000, 327)
 ```
 

@@ -3,9 +3,17 @@ title: "All models are wrong, but some are useful - George Box"
 output: html_document
 ---
 
+```{css, echo = FALSE}
+body {
+  font-family: arial;
+  font-size: 13pt;
+  color: black;
+}
+```
+
 <style> body {text-align: justify} </style>
 
-Hi, I am Seunghoon a full time Data Analyst at a biochemical company based in Wisconsin with 3+ years of professional experience.
+Hi, I am Seunghoon a full-time R&D Data Analyst at a biochemical company based in Wisconsin with 3+ years of professional experience.
 
 
 

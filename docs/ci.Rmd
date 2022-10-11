@@ -3,6 +3,14 @@ title: "Misconceptions about Confidence Intervals"
 output: html_document
 ---
 
+```{css, echo = FALSE}
+body {
+  font-family: arial;
+  font-size: 13pt;
+  color: black;
+}
+```
+
 <style> body {text-align: justify} </style>
 
 A Confidence Interval (CI) is an estimate of the possible values of a population mean. This fairly simple definition is frequently misinterpreted such as the following statement:
