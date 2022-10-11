@@ -354,16 +354,16 @@ node [];
         &quot;Are you happy?&quot; -&gt; &quot;Take a nap&quot; [xlabel = &quot;       False     &quot;];
     }
 }&#39;)</code></pre>
-<div id="htmlwidget-4171f05e539ba6cf2142" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-4171f05e539ba6cf2142">{"x":{"diagram":"\ndigraph {\nforcelabels=true;\nnode [];\n    {\n        \"Are you happy?\"  -> Party [xlabel = \"True    \"];\n        \"Are you happy?\" -> \"Take a nap\" [xlabel = \"       False     \"];\n    }\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-aee5e669c5105841d1b6" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-aee5e669c5105841d1b6">{"x":{"diagram":"\ndigraph {\nforcelabels=true;\nnode [];\n    {\n        \"Are you happy?\"  -> Party [xlabel = \"True    \"];\n        \"Are you happy?\" -> \"Take a nap\" [xlabel = \"       False     \"];\n    }\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>A Regression tree looks like:</p>
 <pre class="r"><code>library(data.tree)
 tree &lt;- Node$new(&quot;Subject &gt; 100 lbs?&quot;)
   leaf1 &lt;- tree$AddChild(&quot;Subject &gt; 5 ft tall?&quot;)
   leaf2 &lt;- tree$AddChild(&quot;Subject &lt;= 5 ft tall?&quot;)
 plot(tree)</code></pre>
-<div id="htmlwidget-74c121c3f5847a4fa488" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-74c121c3f5847a4fa488">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Subject > 100 lbs?\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Subject > 5 ft tall?\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Subject <= 5 ft tall?\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"3\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-729c90f062ca74b878df" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-729c90f062ca74b878df">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Subject > 100 lbs?\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Subject > 5 ft tall?\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Subject <= 5 ft tall?\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"3\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>We will first go over the details of Classification Trees. Note that
 a Classification Tree can have a mix of numeric and categorical
 statements. Also, it can have the same numeric variable with different
@@ -482,8 +482,8 @@ one with our cancer <code>response</code>.</p>
   leaf1 &lt;- tree$AddChild(&quot;Cancer \n yes: 1 \n no: 2&quot;)
   leaf2 &lt;- tree$AddChild(&quot;Cancer \n yes: 1 \n no: 1&quot;)
 plot(tree)</code></pre>
-<div id="htmlwidget-7d9ebfb41a5389772951" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-7d9ebfb41a5389772951">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Smoking?\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Cancer \n yes: 1 \n no: 2\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Cancer \n yes: 1 \n no: 1\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"3\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-c054dca9efc73c8afc6d" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-c054dca9efc73c8afc6d">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Smoking?\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Cancer \n yes: 1 \n no: 2\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Cancer \n yes: 1 \n no: 1\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"3\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>The way I calculated the number for yes and no is just by following
 the category for <code>cancer</code> row by row. Starting with
 <code>smoking</code> and <code>cancer</code>, the first row has
@@ -499,8 +499,8 @@ leaf nodes: it has at least one or more count for <code>yes</code> and
   leaf1 &lt;- tree$AddChild(&quot;Cancer \n yes: 2 \n no: 1&quot;)
   leaf2 &lt;- tree$AddChild(&quot;Cancer \n yes: 0 \n no: 2&quot;)
 plot(tree)</code></pre>
-<div id="htmlwidget-d3ed9d4e3b8746c9897d" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-d3ed9d4e3b8746c9897d">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Diabetes?\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Cancer \n yes: 2 \n no: 1\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Cancer \n yes: 0 \n no: 2\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"3\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-d4ee67a4c386a6505e0b" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-d4ee67a4c386a6505e0b">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Diabetes?\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Cancer \n yes: 2 \n no: 1\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Cancer \n yes: 0 \n no: 2\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"3\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>So this tree is less <code>impure</code> than the first one as you
 can see from the right leaf: all of them are classified into
 <code>no</code>. To quantify this <code>impurity</code>, we will use
@@ -539,8 +539,8 @@ start with <code>age</code> &lt; 20:</p>
   leaf1 &lt;- tree$AddChild(&quot;Cancer \n yes: 1 \n no: 0&quot;)
   leaf2 &lt;- tree$AddChild(&quot;Cancer \n yes: 1 \n no: 3&quot;)
 plot(tree)</code></pre>
-<div id="htmlwidget-5762c0ed9850b39a134d" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-5762c0ed9850b39a134d">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Age < 20\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Cancer \n yes: 1 \n no: 0\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Cancer \n yes: 1 \n no: 3\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"3\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-33c67a90cd8cb3201bc5" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-33c67a90cd8cb3201bc5">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Age < 20\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Cancer \n yes: 1 \n no: 0\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Cancer \n yes: 1 \n no: 3\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"3\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>Gini Impurity for the left leave is 0 and the right is <span
 class="math inline">\(1 - (\frac{1}{4})^2 - (\frac{3}{4})^2=0.375 =&gt;
 Weighted ~ Gini ~ Impurity=0 + 0.375(\frac{4}{5})^2=0.3\)</span>.</p>
@@ -555,8 +555,8 @@ hence we choose diabetes.</p>
   leaf1 &lt;- tree$AddChild(&quot;Cancer \n yes: 2 \n no: 1&quot;)
   leaf2 &lt;- tree$AddChild(&quot;Cancer \n yes: 0 \n no: 2&quot;)
 plot(tree)</code></pre>
-<div id="htmlwidget-23e2e23d5d2ce805ede5" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-23e2e23d5d2ce805ede5">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Diabetes\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Cancer \n yes: 2 \n no: 1\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Cancer \n yes: 0 \n no: 2\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"3\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-dd128b8653597fc252bd" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-dd128b8653597fc252bd">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Diabetes\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Cancer \n yes: 2 \n no: 1\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Cancer \n yes: 0 \n no: 2\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"3\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>The cancer distribution for ‘diabetes == yes’ (the left leaf) are
 represented as bold font:</p>
 <pre class="r"><code>knitr::kable(df, align = &quot;c&quot;, caption = &quot;&lt;center&gt;Table 2&lt;/center&gt;&quot;) %&gt;% 
@@ -667,16 +667,16 @@ is <span class="math inline">\(1/3\)</span>:</p>
   leaf1 &lt;- tree$AddChild(&quot;Cancer \n yes: 1 \n no: 1&quot;)
   leaf2 &lt;- tree$AddChild(&quot;Cancer \n yes: 1 \n no: 0&quot;)
 plot(tree)</code></pre>
-<div id="htmlwidget-87d442ef0c106fd63e01" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-87d442ef0c106fd63e01">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Smoke\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Cancer \n yes: 1 \n no: 1\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Cancer \n yes: 1 \n no: 0\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"3\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-bb6afaeda075241e8ecd" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-bb6afaeda075241e8ecd">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Smoke\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Cancer \n yes: 1 \n no: 1\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Cancer \n yes: 1 \n no: 0\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"3\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>Next, of the three rows having ‘diabetes == yes’, the Gini Impurity
 for ‘age’ is also <span class="math inline">\(1/3\)</span>:</p>
 <pre class="r"><code>tree &lt;- Node$new(&quot;Smoke&quot;)
   leaf1 &lt;- tree$AddChild(&quot;Cancer \n yes: 1 \n no: 1&quot;)
   leaf2 &lt;- tree$AddChild(&quot;Cancer \n yes: 1 \n no: 0&quot;)
 plot(tree)</code></pre>
-<div id="htmlwidget-77a705721c177ad1b76f" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-77a705721c177ad1b76f">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Smoke\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Cancer \n yes: 1 \n no: 1\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Cancer \n yes: 1 \n no: 0\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"3\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-586e94a49628a97c02a6" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-586e94a49628a97c02a6">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Smoke\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Cancer \n yes: 1 \n no: 1\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Cancer \n yes: 1 \n no: 0\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"3\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>Since both Gini Impurities are <span
 class="math inline">\(1/3\)</span>, we can choose anything. We will pick
 ‘smoke’. Again our updated tree is:</p>
@@ -686,8 +686,8 @@ class="math inline">\(1/3\)</span>, we can choose anything. We will pick
     leaf1_2 &lt;- leaf1$AddChild(&quot;Cancer \n yes: 1 \n no: 0&quot;)
   leaf2 &lt;- root$AddChild(&quot;Cancer \n yes: 0 \n no: 2&quot;)
 plot(root)</code></pre>
-<div id="htmlwidget-5702c8c741fae4594841" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-5702c8c741fae4594841">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Diabetes\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Smoke\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Cancer \n yes: 1 \n no: 1\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"4\" [label = \"Cancer \n yes: 1 \n no: 0\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"5\" [label = \"Cancer \n yes: 0 \n no: 2\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"5\" \n  \"2\"->\"3\" \n  \"2\"->\"4\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-fa52e7b5a3c872423395" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-fa52e7b5a3c872423395">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Diabetes\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Smoke\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Cancer \n yes: 1 \n no: 1\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"4\" [label = \"Cancer \n yes: 1 \n no: 0\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"5\" [label = \"Cancer \n yes: 0 \n no: 2\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"5\" \n  \"2\"->\"3\" \n  \"2\"->\"4\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>We still have one more left leave that is still impure. We foucs on
 the rows when ‘diabetes == yes’ and ‘smoke == yes’:</p>
 <pre class="r"><code>knitr::kable(df, align = &quot;c&quot;, caption = &quot;&lt;center&gt;Table 2&lt;/center&gt;&quot;) %&gt;% 
@@ -797,8 +797,8 @@ no
     leaf1_2 &lt;- leaf1$AddChild(&quot;Cancer \n yes: 1 \n no: 0&quot;)
   leaf2 &lt;- root$AddChild(&quot;Cancer \n yes: 0 \n no: 2&quot;)
 plot(root)</code></pre>
-<div id="htmlwidget-1ca0a67dbb9cf11424eb" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-1ca0a67dbb9cf11424eb">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Diabetes\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Smoke\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Age < 20\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"4\" [label = \"Cancer \n yes: 1 \n no: 0\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"5\" [label = \"Cancer \n yes: 0 \n no: 1\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"6\" [label = \"Cancer \n yes: 1 \n no: 0\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"7\" [label = \"Cancer \n yes: 0 \n no: 2\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"7\" \n  \"2\"->\"3\" \n  \"2\"->\"6\" \n  \"3\"->\"4\" \n  \"3\"->\"5\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-44ab9a312627952af6a6" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-44ab9a312627952af6a6">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Diabetes\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Smoke\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Age < 20\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"4\" [label = \"Cancer \n yes: 1 \n no: 0\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"5\" [label = \"Cancer \n yes: 0 \n no: 1\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"6\" [label = \"Cancer \n yes: 1 \n no: 0\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"7\" [label = \"Cancer \n yes: 0 \n no: 2\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"7\" \n  \"2\"->\"3\" \n  \"2\"->\"6\" \n  \"3\"->\"4\" \n  \"3\"->\"5\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>Now all of the leaves are pure.</p>
 <p>Lastly, we need to have a final output from all leaves. In general,
 we pick the maximum value between ‘yes’ and ‘no’. Thus, the final tree
@@ -811,8 +811,8 @@ is:</p>
     leaf1_2 &lt;- leaf1$AddChild(&quot;Cancer&quot;)
   leaf2 &lt;- root$AddChild(&quot;No Cancer&quot;)
 plot(root)</code></pre>
-<div id="htmlwidget-1912c4e993b7f0b8b02e" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-1912c4e993b7f0b8b02e">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Diabetes\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Smoke\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Age < 20\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"4\" [label = \"Cancer\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"5\" [label = \"No Cancer\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"6\" [label = \"Cancer\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"7\" [label = \"No Cancer\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"7\" \n  \"2\"->\"3\" \n  \"2\"->\"6\" \n  \"3\"->\"4\" \n  \"3\"->\"5\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-bb3cc19cf2936dea69b0" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-bb3cc19cf2936dea69b0">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Diabetes\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Smoke\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Age < 20\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"4\" [label = \"Cancer\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"5\" [label = \"No Cancer\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"6\" [label = \"Cancer\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"7\" [label = \"No Cancer\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"7\" \n  \"2\"->\"3\" \n  \"2\"->\"6\" \n  \"3\"->\"4\" \n  \"3\"->\"5\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>We can now predict/classify with new data. If we have a new patient
 having:</p>
 <pre class="r"><code>smoking &lt;- c(&quot;no&quot;)
@@ -869,8 +869,8 @@ remains impure e.g., we could have stopped at the left leaf:</p></li>
   leaf1 &lt;- root$AddChild(&quot;Cancer \n yes: 1 \n no: 1&quot;)
   leaf2 &lt;- root$AddChild(&quot;Cancer \n yes: 0 \n no: 2&quot;)
 plot(root)</code></pre>
-<div id="htmlwidget-5ace2f5dbdb544697b68" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-5ace2f5dbdb544697b68">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Diabetes\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Cancer \n yes: 1 \n no: 1\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Cancer \n yes: 0 \n no: 2\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"3\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-8744527f7c8f71c0b8cf" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8744527f7c8f71c0b8cf">{"x":{"diagram":"digraph {\n\n\n\n\n  \"1\" [label = \"Diabetes\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"Cancer \n yes: 1 \n no: 1\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"Cancer \n yes: 0 \n no: 2\", fillcolor = \"#FFFFFF\", fontcolor = \"#000000\"] \n  \"1\"->\"2\" \n  \"1\"->\"3\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>So the left leaf is classified as <code>cancer</code>. To determine
 this number, we use cross validation to select the best one.</p>
 
