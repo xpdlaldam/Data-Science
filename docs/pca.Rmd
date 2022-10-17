@@ -327,7 +327,7 @@ ax.legend(targets)
 plt.show()
 ```
 
-One can also us PCA to speed up an ML algorithm such as logistic regression after reducing dimensionality using PCA. We started with 784 features from the MNIST dataset that was reduced to 327 principal components which then can be fed for other ML models. 
+One can also use PCA to speed up an ML algorithm such as logistic regression after reducing dimensionality using PCA. We started with 784 features from the MNIST dataset that was reduced to 327 principal components which then can be fed for other ML models. 
 
 ```{python}
 # mnist = fetch_openml('mnist_784')

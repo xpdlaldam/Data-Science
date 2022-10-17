@@ -89,7 +89,7 @@ Next, we discuss three different ways from a confusion matrix to see how good yo
 
 * $Precision = \frac{TP}{FP+TP}$
 
-* $Recall = \frac{TN}{FN+TP}$
+* $Recall = \frac{TP}{FN+TP}$
 
 Based on the confusion matrix it seems natural to use Accuracy but consider the case where we have 9 negative and 1 positive observations and let's say there is a silly model that always classifies as negative. Then the accuracy is 90% (TN: 9, FP: 0, FN: 1, TP: 0 => $\frac{9+1}{9+0+1+0}$). Hence accuracy is not always a good metric especially when the classes are imbalanced. This is why we need a better metric like **Precision**. As you can see from the formula, the denominator takes all predicted cases both false positive and true positive. Out of these we want to find only the true positives, hence Precision is the accuracy of the positive predictions. 
 

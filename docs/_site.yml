@@ -23,6 +23,9 @@ navbar:
           - text: "Classification Trees"
             href: classtree.html
           
+          - text: "Regression Trees"
+            href: regresstree.html
+          
         - text: "PCA"
           href: pca.html
         
