@@ -12,11 +12,9 @@ body {
 ```
 
 <style> body {text-align: justify} </style>
+Here's a more sophisticated, natural, and professional version of your introduction:  
 
-Hi, I am Seunghoon, a Data Scientist at Munich Re based in New York, NY.
-We are the largest reinsurance company headquarted in Muniche, Germany. 
+"Hi, I'm Seunghoon, a Data Scientist at Munich Re, the world’s leading reinsurance company headquartered in Munich, Germany. Based in New York, NY, I work for Munich Engine, a cutting-edge technology platform that leverages APIs to automate underwriting decisions. My primary responsibilities include developing quarterly updates for various pricing models by  utilizing large-scale datasets of 4M+ rows and 150+ features, developing predictive modeling for bound rate, creating ETL and EDA notebooks for actuaries, and integrating external APIs to enhance data enrichment processes using Python.  
 
-Previously, I was working as a R&D Data Analyst at a biochemical company based in Windsor, Wisconsin for 3.5 years.
-
-
+Before joining Munich Re, I spent 3.5 years as an R&D Data Analyst at a biochemical company in Windsor, Wisconsin, specializing in bovine genetics. In this role, I applied machine learning models and time series forecasting techniques to predict Y-skew measurements and sperm motility, driving data-driven improvements in reproductive biotechnology."
 
